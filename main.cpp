@@ -27,7 +27,7 @@ int main(){
     List list = {};
     listInit(&list);
     listPush(&list, 23, 1);
-    listPush(&list, 25, 2);
+    //listPush(&list, 25, 2);
     listDump(&list);
     listDestroy(&list);
 
@@ -81,9 +81,16 @@ void listPush(List* list, int pushElem, size_t pushPosition){
     }
     else{
         if(pushPosition == 1){
-            list->data[numOfEmptyCell] = pushElem;
-            list->next[numOfEmptyCell] = list->tail;
-            list->tail = numOfEmptyCell;
+            if(list->sizeOfList == 0){
+                list->data[numOfEmptyCell] = pushElem;
+                list->next[numOfEmptyCell] = 0;
+                list->tail = numOfEmptyCell;
+            }
+            else{
+                list->data[numOfEmptyCell] = pushElem;
+                list->next[numOfEmptyCell] = list->tail;
+                list->tail = numOfEmptyCell;
+            }
             list->sizeOfList++;
             return;
         }
