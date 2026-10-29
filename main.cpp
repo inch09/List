@@ -36,7 +36,12 @@ int main(){
     listPush(&list, 17, 4);
     listPush(&list, 13, 3);
     listPop(&list, 1);
-    //listPop(&list, 4);
+    listPop(&list, 4);
+    listPop(&list, 2);
+    listPop(&list, 1);
+    listPop(&list, 1);
+    listPop(&list, 1);
+
     //listPush(&list, 25, 2);
     listDump(&list);
     listDestroy(&list);
@@ -171,9 +176,9 @@ void listPop(List* list, size_t popPosition){
     if(popPosition == list->sizeOfList){
         list->data[indOfPopElem] = POISON;
         list->next[list->prev[indOfPopElem]] = 0;
+        list->head = list->prev[indOfPopElem];
         list->prev[indOfPopElem] = -1;
         list->next[indOfPopElem] = -1;
-        list->head = list->prev[indOfPopElem];
         list->sizeOfList--;
         return;
     }
