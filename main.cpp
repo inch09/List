@@ -3,12 +3,14 @@
 #include <assert.h> 
 #include <malloc.h>
 
+
 //----------------------------------------------------------------------------
 struct List{
     size_t fullSizeOfList;
     size_t sizeOfList;
     int* data;
     int* next;
+    int* prev;
     size_t head;
     size_t tail;
 };
@@ -46,9 +48,17 @@ void listInit(List* list){
     list->next = (int*) calloc(list->fullSizeOfList + 1, sizeof(list->next[0]));
     assert(list->next);
 
+    list->prev = (int*) calloc(list->fullSizeOfList + 1, sizeof(list->prev[0]));
+    assert(list->prev);
+
     list->next[0] = 0;
     for(size_t i = 1; i < list->fullSizeOfList; i++){
         list->next[i] = -1;
+    }
+
+    list->prev[0] = 0;
+    for(size_t i = 1; i < list->fullSizeOfList; i++){
+        list->prev[i] = -1;
     }
 
     list->head = 1;
@@ -112,6 +122,55 @@ void listPush(List* list, int pushElem, size_t pushPosition){
     }
 }
 //----------------------------------------------------------------------------
+void listPop(List* list, size_t popPosition){
+    assert(list);
+    assert(list->sizeOfList > 0);
+    assert((popPosition >= 1) && (popPosition <= list->sizeOfList));
+
+    int numOfEmptyCell = findEmptyCell(list);
+    //printf("%d", numOfEmptyCell);
+    if(numOfEmptyCell < 0){
+        assert(strcmp("PUSH", "ERROR") == 0);
+    }
+    else{
+        if(pushPosition == 1){
+            if(list->sizeOfList == 0){
+                list->data[numOfEmptyCell] = pushElem;
+                list->next[numOfEmptyCell] = 0;
+                list->prev[numOfEmptyCell] = 0;
+                list->tail = numOfEmptyCell;
+                list->head = numOfEmptyCell;
+            }
+            else{
+                list->data[numOfEmptyCell] = pushElem;
+                list->next[numOfEmptyCell] = list->tail;
+                list->prev[numOfEmptyCell] = 0;
+                list->prev[list->tail] = numOfEmptyCell;
+                list->tail = numOfEmptyCell;
+            }
+            list->sizeOfList++;
+            return;
+        }
+        if(pushPosition == (list->sizeOfList + 1)){
+            list->data[numOfEmptyCell] = pushElem;
+            list->next[list->head] = numOfEmptyCell;
+            list->prev[numOfEmptyCell] = list->head;
+            list->next[numOfEmptyCell] = 0;
+            list->head = numOfEmptyCell;
+            list->sizeOfList++;
+            return;
+        }
+
+        int indOfPreviousPos = findElemByPosition(list, pushPosition - 1);
+        list->data[numOfEmptyCell] = pushElem;
+        list->next[numOfEmptyCell] = list->next[indOfPreviousPos];
+        list->next[indOfPreviousPos] = numOfEmptyCell; 
+        list->sizeOfList++;
+        return;
+    }
+}
+
+//----------------------------------------------------------------------------
 int findEmptyCell(List* list){ //return index in array next
     assert(list);
 
@@ -147,12 +206,18 @@ size_t findElemByPosition(List* list, size_t position){
 void listDump(List* list){
     assert(list);
 
+    printf("                            Data arr\n");
     for(size_t i = 0; i < list->fullSizeOfList; i++){
         printf("%2d ", list->data[i]);
     }
     printf("\n");
+    printf("----------------------------------------------------------------------------\n");
 
+    printf("                            Next arr\n");
     for(size_t i = 0; i < list->fullSizeOfList; i++){
         printf("%2d ", list->next[i]);
     }
+    printf("\n");
+    printf("----------------------------------------------------------------------------\n");
+
 }
