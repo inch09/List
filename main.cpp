@@ -14,10 +14,9 @@ struct List{
     size_t head;
     size_t tail;
 };
-
+//----------------------------------------------------------------------------
 #define POISON 67
-
-
+//----------------------------------------------------------------------------
 void listInit(List* list);
 void listDestroy(List* list);
 void listPush(List* list, int pushElem, size_t pushPosition);
@@ -37,6 +36,10 @@ int main(){
 
     List list = {};
     listInit(&list);
+    for(int i = 1; i < 10; i++){
+        listPush(&list, i, i);
+    }
+    listPush(&list, 67, 6);
     listPush(&list, 23, 1);
     listPush(&list, 11, 2);
     listPush(&list, 24, 3);
@@ -349,6 +352,7 @@ void listVerify(List* list){
         assert(strcmp("LIST OVER", "FLOW") == 0);
     }
 }
+//----------------------------------------------------------------------------
 
 // struct List{
 //     size_t fullSizeOfList;
