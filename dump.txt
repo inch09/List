@@ -1,4 +1,5 @@
 digraph{
+rankdir = LR
   node[color = "black", fontsize = 13];
   edge[color = "white", fontcolor = "black", fontsize = 10];
   cell0[shape = "record", label = "{value = 67 |  next = 4294967295 | prev = 4294967295}"];
@@ -9,10 +10,11 @@ digraph{
   cell5[shape = "record", label = "{value =  5 |  next = 10 | prev = 4}"];
   cell6[shape = "record", label = "{value =  6 |  next = 7 | prev = 10}"];
   cell7[shape = "record", label = "{value =  7 |  next = 8 | prev = 6}"];
-  cell8[shape = "record", label = "{value =  8 |  next = 0 | prev = 7}"];
+  cell8[shape = "record", label = "{value =  8 |  next = 0 | prev = 7}", style = "filled", fillcolor = "pink2"];
   cell9[shape = "record", label = "{value = 67 |  next = 4294967295 | prev = 4294967295}"];
   cell10[shape = "record", label = "{value = 52 |  next = 6 | prev = 5}"];
   cell11[shape = "record", label = "{value = 67 |  next = 12 | prev = 0}"];
+  cell12[shape = "record", label = "{value = 11 |  next = 15 | prev = 0}", style = "filled", fillcolor = "lightgreen"];
   cell12[shape = "record", label = "{value = 11 |  next = 15 | prev = 0}"];
   cell13[shape = "record", label = "{value = 24 |  next = 1 | prev = 15}"];
   cell14[shape = "record", label = "{value = 67 |  next = 1 | prev = 13}"];

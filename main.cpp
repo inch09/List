@@ -440,12 +440,23 @@ void listViz(List* list, const char* nameTextFile){
     assert(fileptr);
 
     fprintf(fileptr, "digraph{\n");
+    fprintf(fileptr, "rankdir = LR\n");
     fprintf(fileptr, "  node[color = \"black\", fontsize = 13];\n");
     fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
 
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
-        fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
-        fprintf(fileptr, "  next = %lu | prev = %lu}\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
+        if(i == list->tail){
+            fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
+            fprintf(fileptr, "  next = %lu | prev = %lu}\", style = \"filled\", fillcolor = \"lightgreen\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
+        }
+        if(i == list->head){
+            fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
+            fprintf(fileptr, "  next = %lu | prev = %lu}\", style = \"filled\", fillcolor = \"pink2\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
+        }
+        else{
+            fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
+            fprintf(fileptr, "  next = %lu | prev = %lu}\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
+        }
     }
 
     for(size_t i = 0; i < list->fullSizeOfList; i++){
