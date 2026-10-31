@@ -12,8 +12,8 @@ struct List{
     size_t fullSizeOfList;
     size_t sizeOfList;
     list_elem_type* data;
-    list_elem_type* next;
-    list_elem_type* prev;
+    int* next;
+    int* prev;
     size_t head;
     size_t tail;
 };
@@ -441,20 +441,26 @@ void listViz(List* list, const char* nameTextFile){
 
     fprintf(fileptr, "digraph{\n");
     fprintf(fileptr, "  node[color = \"black\", fontsize = 13];\n");
-    fprintf(fileptr, "  edge[color = \"lightgreen\", fontcolor = \"black\", fontsize = 10];\n");
+    fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
 
-    for(size_t i = 1; i < list->sizeOfList; i++){
-        fprintf(fileptr, "  cell%d[shape = \"record\", label = \"{value = "SPECIFIER" |", i, list->data[i]);
+    for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
+        fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
         fprintf(fileptr, "  next = %lu | prev = %lu}\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
     }
 
-    for(size_t i = 1; i < list->sizeOfList - 1; i++){
+    for(size_t i = 0; i < list->fullSizeOfList; i++){
         fprintf(fileptr, "  cell%d->cell%d [weight = 10];\n", i, i + 1);
     }
 
-    size_t
-    for(size_t i = 0; i < list->sizeOfList; i++){
-        fprintf(fileptr, "  cell%d->cell%d [weight = 1];\n", )
+    fprintf(fileptr, "  edge[color = \"lightgreen\", fontcolor = \"black\", fontsize = 10];\n");
+    size_t ind = list->tail;
+    printf("tail = %d", ind);
+    for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
+        fprintf(fileptr, "  cell%d->cell%d [weight = 1];\n", ind, list->next[ind]);
+        if(ind == list->head){
+            break;
+        }
+        ind = list->next[ind];
     }
 
 

@@ -1,6 +1,6 @@
 digraph{
   node[color = "black", fontsize = 13];
-  edge[color = "lightgreen", fontcolor = "black", fontsize = 10];
+  edge[color = "white", fontcolor = "black", fontsize = 10];
   cell0[shape = "record", label = "{value = 67 |  next = 4294967295 | prev = 4294967295}"];
   cell1[shape = "record", label = "{value =  1 |  next = 2 | prev = 13}"];
   cell2[shape = "record", label = "{value =  2 |  next = 3 | prev = 1}"];
@@ -13,6 +13,11 @@ digraph{
   cell9[shape = "record", label = "{value = 67 |  next = 4294967295 | prev = 4294967295}"];
   cell10[shape = "record", label = "{value = 52 |  next = 6 | prev = 5}"];
   cell11[shape = "record", label = "{value = 67 |  next = 12 | prev = 0}"];
+  cell12[shape = "record", label = "{value = 11 |  next = 15 | prev = 0}"];
+  cell13[shape = "record", label = "{value = 24 |  next = 1 | prev = 15}"];
+  cell14[shape = "record", label = "{value = 67 |  next = 1 | prev = 13}"];
+  cell15[shape = "record", label = "{value = 13 |  next = 13 | prev = 12}"];
+  cell16[shape = "record", label = "{value = 67 |  next = 4294967295 | prev = 4294967295}"];
   cell0->cell1 [weight = 10];
   cell1->cell2 [weight = 10];
   cell2->cell3 [weight = 10];
@@ -24,4 +29,22 @@ digraph{
   cell8->cell9 [weight = 10];
   cell9->cell10 [weight = 10];
   cell10->cell11 [weight = 10];
+  cell11->cell12 [weight = 10];
+  cell12->cell13 [weight = 10];
+  cell13->cell14 [weight = 10];
+  cell14->cell15 [weight = 10];
+  cell15->cell16 [weight = 10];
+  edge[color = "lightgreen", fontcolor = "black", fontsize = 10];
+  cell12->cell15 [weight = 1];
+  cell15->cell13 [weight = 1];
+  cell13->cell1 [weight = 1];
+  cell1->cell2 [weight = 1];
+  cell2->cell3 [weight = 1];
+  cell3->cell4 [weight = 1];
+  cell4->cell5 [weight = 1];
+  cell5->cell10 [weight = 1];
+  cell10->cell6 [weight = 1];
+  cell6->cell7 [weight = 1];
+  cell7->cell8 [weight = 1];
+  cell8->cell0 [weight = 1];
 }
