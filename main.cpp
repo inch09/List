@@ -35,6 +35,7 @@ int findEmptyCell(List* list);
 size_t findElemByPosition(List* list, size_t position);
 //----------------------------------------------------------------------------
 void listDump(List* list);
+void listViz(List* list, const char* nameTextFile);
 void printDataArr(List* list);
 void printNextArr(List* list);
 void printPrevArr(List* list);
@@ -65,6 +66,7 @@ int main(){
 
     //listPush(&list, 25, 2);
     listDump(&list);
+    listViz(&list, "dump.txt");
     listDestroy(&list);
 
     return 0;
@@ -420,7 +422,6 @@ void listVerify(List* list){
 void expandList(List* list){
     assert(list);
 
-
 }
 // struct List{
 //     size_t fullSizeOfList;
@@ -431,3 +432,35 @@ void expandList(List* list){
 //     size_t head;
 //     size_t tail;
 // };
+void listViz(List* list, const char* nameTextFile){
+    assert(list);
+    assert(nameTextFile);
+
+    FILE* fileptr = fopen(nameTextFile, "w");
+    assert(fileptr);
+
+    fprintf(fileptr, "digraph{\n");
+    fprintf(fileptr, "  node[color = \"black\", fontsize = 13];\n");
+    fprintf(fileptr, "  edge[color = \"lightgreen\", fontcolor = \"black\", fontsize = 10];\n");
+
+    for(size_t i = 1; i < list->sizeOfList; i++){
+        fprintf(fileptr, "  cell%d[shape = \"record\", label = \"{value = "SPECIFIER" |", i, list->data[i]);
+        fprintf(fileptr, "  next = %lu | prev = %lu}\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
+    }
+
+    for(size_t i = 1; i < list->sizeOfList - 1; i++){
+        fprintf(fileptr, "  cell%d->cell%d [weight = 10];\n", i, i + 1);
+    }
+
+    size_t
+    for(size_t i = 0; i < list->sizeOfList; i++){
+        fprintf(fileptr, "  cell%d->cell%d [weight = 1];\n", )
+    }
+
+
+
+
+
+    fprintf(fileptr, "}");
+    fclose(fileptr);
+}

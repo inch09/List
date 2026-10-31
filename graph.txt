@@ -1,3 +1,7 @@
 digraph{
-    a->b->c;
+    node[color = "696752", fontsize = 13];
+    edge[color = "lightgreen", fontcolor = "black", fontsize = 10];
+    POLTORASHKA[shape = "record", label = "poltorashka | poltorashka"];
+    MEOW[shape = "record", label  = "{meow | meow | meow}"];
+    POLTORASHKA->MEOW;
 }
