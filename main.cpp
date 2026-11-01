@@ -445,25 +445,31 @@ void listViz(List* list, const char* nameTextFile){
     fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
 
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
-        if(i == list->tail){
-            fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
-            fprintf(fileptr, "  next = %lu | prev = %lu}\", style = \"filled\", fillcolor = \"lightgreen\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
+        fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
+        fprintf(fileptr, "  next = %d | prev = %d | index = %lu}\"", list->next[i], list->prev[i], (unsigned long) i);
+        if(i == 0){
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"goldenrod1\"");
         }
-        if(i == list->head){
-            fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
-            fprintf(fileptr, "  next = %lu | prev = %lu}\", style = \"filled\", fillcolor = \"pink2\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
+        else if(list->data[i] == POISON){
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"grey\"");
+        }
+        else if(i == list->tail){
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightgreen\"");
+        }
+        else if(i == list->head){
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"pink2\"");
         }
         else{
-            fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
-            fprintf(fileptr, "  next = %lu | prev = %lu}\"];\n", (unsigned long) list->next[i], (unsigned long) list->prev[i]);
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"white\"");
         }
+        fprintf(fileptr, "];\n");
     }
 
     for(size_t i = 0; i < list->fullSizeOfList; i++){
         fprintf(fileptr, "  cell%d->cell%d [weight = 10];\n", i, i + 1);
     }
 
-    fprintf(fileptr, "  edge[color = \"lightgreen\", fontcolor = \"black\", fontsize = 10];\n");
+    fprintf(fileptr, "  edge[color = \"blue\", fontcolor = \"black\", fontsize = 10];\n");
     size_t ind = list->tail;
     printf("tail = %d", ind);
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
