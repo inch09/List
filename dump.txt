@@ -17,7 +17,7 @@ size = "80, 260"  node[color = "black", fontsize = 13];
   cell13[shape = "record", label = "{value = 24 |  next = 1 | prev = 15 | index = 13}", style = "filled", fillcolor = "white"];
   cell14[shape = "record", label = "{value = 67 |  next = 1 | prev = 13 | index = 14}", style = "filled", fillcolor = "grey"];
   cell15[shape = "record", label = "{value = 13 |  next = 13 | prev = 12 | index = 15}", style = "filled", fillcolor = "white"];
-  cell16[shape = "record", label = "{value = 67 |  next = -1 | prev = -1 | index = 16}", style = "filled", fillcolor = "grey"];
+  cell16[shape = "record", label = "{value = 67 |  next = -17 | prev = -1 | index = 16}", style = "filled", fillcolor = "grey"];
   cell0->cell1 [weight = 10];
   cell1->cell2 [weight = 10];
   cell2->cell3 [weight = 10];

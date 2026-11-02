@@ -2,6 +2,7 @@
 #include <string.h>
 #include <assert.h> 
 #include <malloc.h>
+#include <math.h>
 
 //----------------------------------------------------------------------------
 #define POISON 67
@@ -34,6 +35,7 @@ void listPopInternalElem(List* list, size_t popPosition);
 //----------------------------------------------------------------------------
 int findEmptyCell(List* list);
 size_t findElemByPosition(List* list, size_t position);
+int findLastEmptyCell(List* list);
 //----------------------------------------------------------------------------
 void listDump(List* list);
 void listViz(List* list, const char* nameTextFile);
@@ -48,18 +50,19 @@ int main(){
 
     List list = {};
     listInit(&list);
-    for(int i = 1; i < 10; i++){
-        listPush(&list, i, i);
-    }
-    listPush(&list, 52, 6);
-    listPush(&list, 23, 1);
-    listPush(&list, 11, 2);
-    listPush(&list, 24, 3);
-    listPush(&list, 17, 4);
-    listPush(&list, 13, 3);
-    listPop(&list, 1);
-    listPop(&list, 4);
-    listPop(&list, 13);
+    //for(int i = 1; i < 15; i++){
+    //    listPush(&list, i, i);
+    //}
+    // listPush(&list, 52, 6);
+    // listPush(&list, 23, 1);
+    // listPush(&list, 11, 2);
+    // listPush(&list, 24, 3);
+    // listPush(&list, 17, 4);
+    // listPush(&list, 13, 3);
+    // listPop(&list, 1);
+    // listPop(&list, 4);
+    // listPop(&list, 13);
+    
     //listPop(&list, 2);
     //listPop(&list, 1);
     //listPop(&list, 1);
@@ -94,8 +97,13 @@ void listInit(List* list){
 
     list->next[0] = 0;
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
-        list->next[i] = -1;
+        if(i == list->fullSizeOfList){
+            list->next = 0;
+            break;
+        }
+        list->next[i] = -(i + 1);
     }
+    list->indOfFirstEmptyCell = 1;
 
     list->prev[0] = 0;
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
@@ -124,44 +132,46 @@ void listDestroy(List* list){
 void listPush(List* list, list_elem_type pushElem, size_t pushPosition){
     assert(list);
     assert((pushPosition >= 1) && (pushPosition <= (list->sizeOfList + 1)));
+    assert(list->indOfFirstEmptyCell != 0);
 
-    int numOfEmptyCell = findEmptyCell(list);
+
+    //int numOfEmptyCell = findEmptyCell(list);
     //printf("%d", numOfEmptyCell);
-    if(numOfEmptyCell < 0){
-        assert(strcmp("PUSH", "ERROR") == 0);
+    // if(numOfEmptyCell < 0){
+    //     assert(strcmp("PUSH", "ERROR") == 0);
+    // }
+    // else{
+    if(pushPosition == 1){
+        listPushInTail(list, pushElem);
+        return;
     }
-    else{
-        if(pushPosition == 1){
-            listPushInTail(list, pushElem);
-            return;
-        }
-        if(pushPosition == (list->sizeOfList + 1)){
-            listPushInHead(list, pushElem);
-            return;
-        }
+    if(pushPosition == (list->sizeOfList + 1)){
+        listPushInHead(list, pushElem);
+        return;
+    }
 
-        listPushInsideList(list, pushElem, pushPosition);
-    }
+    listPushInsideList(list, pushElem, pushPosition);
+
+    list->indOfFirstEmptyCell = abs(list->next[list->indOfFirstEmptyCell]);
+    // }
 }
 //----------------------------------------------------------------------------
 void listPushInTail(List* list, list_elem_type pushElem){
     assert(list);
-
-    int numOfEmptyCell = findEmptyCell(list);
     
     if(list->sizeOfList == 0){
-        list->data[numOfEmptyCell] = pushElem;
-        list->next[numOfEmptyCell] = 0;
-        list->prev[numOfEmptyCell] = 0;
-        list->tail = numOfEmptyCell;
-        list->head = numOfEmptyCell;
+        list->data[list->indOfFirstEmptyCell] = pushElem;
+        list->next[list->indOfFirstEmptyCell] = 0;
+        list->prev[list->indOfFirstEmptyCell] = 0;
+        list->tail = list->indOfFirstEmptyCell;
+        list->head = list->indOfFirstEmptyCell;
     }
     else{
-        list->data[numOfEmptyCell] = pushElem;
-        list->next[numOfEmptyCell] = list->tail;
-        list->prev[numOfEmptyCell] = 0;
-        list->prev[list->tail] = numOfEmptyCell;
-        list->tail = numOfEmptyCell;
+        list->data[list->indOfFirstEmptyCell] = pushElem;
+        list->next[list->indOfFirstEmptyCell] = list->tail;
+        list->prev[list->indOfFirstEmptyCell] = 0;
+        list->prev[list->tail] = list->indOfFirstEmptyCell;
+        list->tail = list->indOfFirstEmptyCell;
     }
     list->sizeOfList++;
     return;
@@ -214,6 +224,9 @@ void listPop(List* list, size_t popPosition){
     }
 
     listPopInternalElem(list, popPosition);
+    
+    size_t lastEmptyCell = findLastEmptyCell(list);
+    list->next[lastEmptyCell] = -indOfPopElem;
     return;
 }
 //----------------------------------------------------------------------------
@@ -275,6 +288,20 @@ int findEmptyCell(List* list){ //return index in array next
         if(list->next[i] < 0){
             return i;
         }
+    }
+
+    return -1;
+}
+//----------------------------------------------------------------------------
+int findLastEmptyCell(List* list){
+    assert(list);
+
+    size_t emptyCell = abs(list->indOfFirstEmptyCell);
+    for(size_t i = 0; i < list->fullSizeOfList; i++){
+        if(list->next[emptyCell] == 0){
+            return emptyCell;
+        }
+        emptyCell = abs(list->next[emptyCell]);
     }
 
     return -1;
