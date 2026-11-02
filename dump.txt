@@ -1,6 +1,5 @@
 digraph{
-rankdir = LR
-  node[color = "black", fontsize = 13];
+size = "80, 260"  node[color = "black", fontsize = 13];
   edge[color = "white", fontcolor = "black", fontsize = 10];
   cell0[shape = "record", label = "{value = 67 |  next = -1 | prev = -1 | index = 0}", style = "filled", fillcolor = "goldenrod1"];
   cell1[shape = "record", label = "{value =  1 |  next = 2 | prev = 13 | index = 1}", style = "filled", fillcolor = "white"];

@@ -16,6 +16,7 @@ struct List{
     int* prev;
     size_t head;
     size_t tail;
+    size_t indOfFirstEmptyCell;
 };
 //----------------------------------------------------------------------------
 void listInit(List* list);
@@ -299,6 +300,7 @@ size_t findElemByPosition(List* list, size_t position){
     return indInNext;
 }
 //----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void listDump(List* list){
     assert(list);
 
@@ -440,7 +442,8 @@ void listViz(List* list, const char* nameTextFile){
     assert(fileptr);
 
     fprintf(fileptr, "digraph{\n");
-    fprintf(fileptr, "rankdir = LR\n");
+    //fprintf(fileptr, "rankdir = LR\n");
+    fprintf(fileptr, "size = \"80, 260\"");
     fprintf(fileptr, "  node[color = \"black\", fontsize = 13];\n");
     fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
 
