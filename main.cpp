@@ -62,7 +62,7 @@ int main(){
     listPop(&list, 1);
     listPop(&list, 4);
     listPop(&list, 7);
-    
+    listPush(&list, 69, 6);
     //listPop(&list, 2);
     //listPop(&list, 1);
     //listPop(&list, 1);
@@ -182,14 +182,12 @@ void listPushInTail(List* list, list_elem_type pushElem){
 //----------------------------------------------------------------------------
 void listPushInHead(List* list, list_elem_type pushElem){
     assert(list);
-    
-    int numOfEmptyCell = findEmptyCell(list);
 
-    list->data[numOfEmptyCell] = pushElem;
-    list->next[list->head] = numOfEmptyCell;
-    list->prev[numOfEmptyCell] = list->head;
-    list->next[numOfEmptyCell] = 0;
-    list->head = numOfEmptyCell;
+    list->data[list->indOfFirstEmptyCell] = pushElem;
+    list->next[list->head] = list->indOfFirstEmptyCell;
+    list->prev[list->indOfFirstEmptyCell] = list->head;
+    list->next[list->indOfFirstEmptyCell] = 0;
+    list->head = list->indOfFirstEmptyCell;
     list->sizeOfList++;
     return;
 }
@@ -197,14 +195,13 @@ void listPushInHead(List* list, list_elem_type pushElem){
 void listPushInsideList(List* list, list_elem_type pushElem, size_t pushPosition){
     assert(list);
     
-    int numOfEmptyCell = findEmptyCell(list);
     int indOfPreviousPos = findElemByPosition(list, pushPosition - 1);
 
-    list->data[numOfEmptyCell] = pushElem;//
-    list->next[numOfEmptyCell] = list->next[indOfPreviousPos];//
-    list->prev[numOfEmptyCell] = indOfPreviousPos;//
-    list->prev[list->next[indOfPreviousPos]] = numOfEmptyCell;//
-    list->next[indOfPreviousPos] = numOfEmptyCell;//
+    list->data[list->indOfFirstEmptyCell] = pushElem;//
+    list->next[list->indOfFirstEmptyCell] = list->next[indOfPreviousPos];//
+    list->prev[list->indOfFirstEmptyCell] = indOfPreviousPos;//
+    list->prev[list->next[indOfPreviousPos]] = list->indOfFirstEmptyCell;//
+    list->next[indOfPreviousPos] = list->indOfFirstEmptyCell;//
     list->sizeOfList++;
     return;
 }
