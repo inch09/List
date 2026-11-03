@@ -426,10 +426,10 @@ void printIndexes(List* list){
     printf("\n");
 }
 //----------------------------------------------------------------------------
-void listVerify(List* list){
+void listVerify(List* list){// ubrat assery i vyvodit oschibki
     assert(list);
     if(list == NULL){
-        assert(strcmp("LIST NULL", "POINTER") == 0);
+        assert(0 && "text" ); // strcmp("LIST NULL", "POINTER") == 0);
     }
     if(list->data == NULL){
         assert(strcmp("LIST DATA NULL", "POINTER") == 0);
@@ -451,19 +451,6 @@ void listVerify(List* list){
     }
 }
 //----------------------------------------------------------------------------
-void expandList(List* list){
-    assert(list);
-
-}
-// struct List{
-//     size_t fullSizeOfList;
-//     size_t sizeOfList;
-//     int* data;
-//     int* next;
-//     int* prev;
-//     size_t head;
-//     size_t tail;
-// };
 void listViz(List* list, const char* nameTextFile){
     assert(list);
     assert(nameTextFile);
@@ -471,8 +458,11 @@ void listViz(List* list, const char* nameTextFile){
     FILE* fileptr = fopen(nameTextFile, "w");
     assert(fileptr);
 
+    size_t lastEmptyCell = findLastEmptyCell(list);
+
     fprintf(fileptr, "digraph{\n");
-    //fprintf(fileptr, "rankdir = LR\n");
+    fprintf(fileptr, "graph [splines=ortho];\n");
+    fprintf(fileptr, "rankdir = LR\n");
     fprintf(fileptr, "size = \"80, 260\"");
     fprintf(fileptr, "  node[color = \"black\", fontsize = 13];\n");
     fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
@@ -484,13 +474,16 @@ void listViz(List* list, const char* nameTextFile){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"goldenrod1\"");
         }
         else if(i == list->tail){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightgreen\"");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#a5436c\"");
         }
         else if(i == list->head){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"pink2\"");
         }
         else if(i == list->indOfFirstEmptyCell){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightcyan2\"");
+        }
+        else if(i == lastEmptyCell){
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightyellow\"");
         }
         else if(list->data[i] == POISON){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"grey\"");
