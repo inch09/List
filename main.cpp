@@ -59,9 +59,9 @@ int main(){
     // listPush(&list, 24, 3);
     // listPush(&list, 17, 4);
     // listPush(&list, 13, 3);
-    // listPop(&list, 1);
-    // listPop(&list, 4);
-    // listPop(&list, 13);
+    listPop(&list, 1);
+    listPop(&list, 4);
+    listPop(&list, 7);
     
     //listPop(&list, 2);
     //listPop(&list, 1);
@@ -246,9 +246,10 @@ void listPopTail(List* list){
     else{
         list->data[list->tail] = POISON;
         list->prev[list->next[list->tail]] = 0;
+        size_t rememberTailInd = list->tail;
         list->tail = list->next[list->tail];
-        list->next[list->prev[list->tail]] = -1;
-        list->prev[list->prev[list->tail]] = -1;
+        list->next[rememberTailInd] = -rememberTailInd;
+        list->prev[rememberTailInd] = -1;
     }
     list->sizeOfList--;
 
@@ -261,10 +262,10 @@ void listPopHead(List* list){
     list->data[list->head] = POISON;
     list->next[list->prev[list->head]] = 0;
 
-    size_t temp = list->head;
+    size_t rememberHeadInd = list->head;
     list->head = list->prev[list->head];
-    list->prev[temp] = -1;
-    list->next[temp] = -1;
+    list->prev[rememberHeadInd] = -1;
+    list->next[rememberHeadInd] = -rememberHeadInd;
     list->sizeOfList--;
     return;
 
@@ -278,6 +279,8 @@ void listPopInternalElem(List* list, size_t popPosition){
     list->data[indOfPopElem] = POISON;
     list->next[list->prev[indOfPopElem]] = list->next[indOfPopElem];
     list->prev[list->next[indOfPopElem]] = list->prev[indOfPopElem];
+
+    list->next[indOfPopElem] = -indOfPopElem;
     list->sizeOfList--;
 
     return;
@@ -483,14 +486,17 @@ void listViz(List* list, const char* nameTextFile){
         if(i == 0){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"goldenrod1\"");
         }
-        else if(list->data[i] == POISON){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"grey\"");
-        }
         else if(i == list->tail){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightgreen\"");
         }
         else if(i == list->head){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"pink2\"");
+        }
+        else if(i == list->indOfFirstEmptyCell){
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightcyan2\"");
+        }
+        else if(list->data[i] == POISON){
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"grey\"");
         }
         else{
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"white\"");
