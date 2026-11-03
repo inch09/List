@@ -50,12 +50,12 @@ int main(){
 
     List list = {};
     listInit(&list);
-    //for(int i = 1; i < 15; i++){
-    //    listPush(&list, i, i);
-    //}
+    for(int i = 1; i < 10; i++){
+       listPush(&list, i, i);
+    }
     // listPush(&list, 52, 6);
-    // listPush(&list, 23, 1);
-    // listPush(&list, 11, 2);
+    //listPush(&list, 23, 1);
+    //listPush(&list, 11, 2);
     // listPush(&list, 24, 3);
     // listPush(&list, 17, 4);
     // listPush(&list, 13, 3);
@@ -98,7 +98,7 @@ void listInit(List* list){
     list->next[0] = 0;
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
         if(i == list->fullSizeOfList){
-            list->next = 0;
+            list->next[i] = -i;
             break;
         }
         list->next[i] = -(i + 1);
@@ -135,6 +135,10 @@ void listPush(List* list, list_elem_type pushElem, size_t pushPosition){
     assert(list->indOfFirstEmptyCell != 0);
 
 
+    size_t nextEmptyCell = abs(list->next[list->indOfFirstEmptyCell]);
+
+    
+
     //int numOfEmptyCell = findEmptyCell(list);
     //printf("%d", numOfEmptyCell);
     // if(numOfEmptyCell < 0){
@@ -143,16 +147,15 @@ void listPush(List* list, list_elem_type pushElem, size_t pushPosition){
     // else{
     if(pushPosition == 1){
         listPushInTail(list, pushElem);
-        return;
     }
-    if(pushPosition == (list->sizeOfList + 1)){
+    else if(pushPosition == (list->sizeOfList + 1)){
         listPushInHead(list, pushElem);
-        return;
     }
-
-    listPushInsideList(list, pushElem, pushPosition);
-
-    list->indOfFirstEmptyCell = abs(list->next[list->indOfFirstEmptyCell]);
+    else{
+        listPushInsideList(list, pushElem, pushPosition);
+    }
+    list->indOfFirstEmptyCell = nextEmptyCell;
+    return;
     // }
 }
 //----------------------------------------------------------------------------
@@ -216,14 +219,13 @@ void listPop(List* list, size_t popPosition){
 
     if(popPosition == 1){
         listPopTail(list);
-        return;
     }
-    if(popPosition == list->sizeOfList){
+    else if(popPosition == list->sizeOfList){
         listPopHead(list);
-        return;
     }
-
-    listPopInternalElem(list, popPosition);
+    else{
+        listPopInternalElem(list, popPosition);
+    }
     
     size_t lastEmptyCell = findLastEmptyCell(list);
     list->next[lastEmptyCell] = -indOfPopElem;
@@ -298,7 +300,7 @@ int findLastEmptyCell(List* list){
 
     size_t emptyCell = abs(list->indOfFirstEmptyCell);
     for(size_t i = 0; i < list->fullSizeOfList; i++){
-        if(list->next[emptyCell] == 0){
+        if(abs(list->next[emptyCell]) == emptyCell){
             return emptyCell;
         }
         emptyCell = abs(list->next[emptyCell]);
@@ -379,10 +381,11 @@ void printPrevArr(List* list){
 void printListParameters(List* list){
     assert(list);
     
-    printf("tail = %lu\n",      (long unsigned) list->tail);
-    printf("head = %lu\n",      (long unsigned) list->head);
-    printf("size = %lu\n",      (long unsigned) list->sizeOfList);
-    printf("full size = %lu\n", (long unsigned) list->fullSizeOfList);
+    printf("tail = %lu\n",             (unsigned long) list->tail);
+    printf("head = %lu\n",             (unsigned long) list->head);
+    printf("size = %lu\n",             (unsigned long) list->sizeOfList);
+    printf("full size = %lu\n",        (unsigned long) list->fullSizeOfList);
+    printf("first empty cell = %lu\n", (unsigned long) list->indOfFirstEmptyCell);
     printf("----------------------------------------------------------------------------\n");
 
 }
@@ -510,6 +513,16 @@ void listViz(List* list, const char* nameTextFile){
         ind = list->next[ind];
     }
 
+    fprintf(fileptr, "  edge[color = \"red\", fontcolor = \"black\", fontsize = 10];\n");
+    size_t indOfEmptyCell = list->indOfFirstEmptyCell;
+    size_t indOfLastEmptyCell = findLastEmptyCell(list);
+    for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
+        fprintf(fileptr, "  cell%d->cell%d [weight = 1];\n", indOfEmptyCell, abs(list->next[indOfEmptyCell]));
+        if(indOfEmptyCell == indOfLastEmptyCell){
+            break;
+        }
+        indOfEmptyCell = abs(list->next[indOfEmptyCell]);
+    }
 
 
 
