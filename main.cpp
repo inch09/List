@@ -468,8 +468,8 @@ void listViz(List* list, const char* nameTextFile){
     fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
 
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
-        fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"{value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
-        fprintf(fileptr, "  next = %d | prev = %d | index = %lu}\"", list->next[i], list->prev[i], (unsigned long) i);
+        fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
+        fprintf(fileptr, "  next = %d | prev = %d | index = %lu\"", list->next[i], list->prev[i], (unsigned long) i);
         if(i == 0){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"goldenrod1\"");
         }
