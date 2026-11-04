@@ -465,37 +465,43 @@ void listViz(List* list, const char* nameTextFile){
     fprintf(fileptr, "rankdir = LR\n");
     fprintf(fileptr, "size = \"80, 260\"");
     fprintf(fileptr, "  node[color = \"black\", fontsize = 13];\n");
-    fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
+    fprintf(fileptr, "  edge[color = \"black\", fontcolor = \"black\", fontsize = 10];\n");
+
+
+    fprintf(fileptr, "  head[style = \"filled\", fillcolor = \"#6fe8a1\"];\n");
+    fprintf(fileptr, "  tail[style = \"filled\", fillcolor = \"#a21e5a\"];\n");
 
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
         fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
         fprintf(fileptr, "  next = %d | prev = %d | index = %lu\"", list->next[i], list->prev[i], (unsigned long) i);
         if(i == 0){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"goldenrod1\"");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"goldenrod1\"];\n");
         }
         else if(i == list->tail){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#a5436c\"");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#a5436c\"];\n");
+            fprintf(fileptr, "  tail->cell%lu [weight = 1];\n", (unsigned long) i);
         }
         else if(i == list->head){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"pink2\"");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"pink2\"];\n");
+            fprintf(fileptr, "  head->cell%lu [weight = 1];\n", (unsigned long) i);
         }
         else if(i == list->indOfFirstEmptyCell){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightcyan2\"");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightcyan2\"];\n");
         }
         else if(i == lastEmptyCell){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightyellow\"");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightyellow\"];\n");
         }
         else if(list->data[i] == POISON){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"grey\"");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"grey\"];\n");
         }
         else{
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"white\"");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"white\"];\n");
         }
-        fprintf(fileptr, "];\n");
     }
 
+    fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
     for(size_t i = 0; i < list->fullSizeOfList; i++){
-        fprintf(fileptr, "  cell%d->cell%d [weight = 10];\n", i, i + 1);
+        fprintf(fileptr, "  cell%d->cell%d [weight = 100];\n", i, i + 1);
     }
 
     fprintf(fileptr, "  edge[color = \"blue\", fontcolor = \"black\", fontsize = 10];\n");
@@ -519,9 +525,6 @@ void listViz(List* list, const char* nameTextFile){
         }
         indOfEmptyCell = abs(list->next[indOfEmptyCell]);
     }
-
-
-
 
     fprintf(fileptr, "}");
     fclose(fileptr);
