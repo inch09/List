@@ -37,14 +37,14 @@ int findEmptyCell        (List* list);
 size_t findElemByPosition(List* list, size_t position);
 int findLastEmptyCell    (List* list);
 //----------------------------------------------------------------------------
-void listDump           (List* list);
+void listDump           (List* list, FILE* dumpFile);
 void listViz            (List* list, const char* nameTextFile);
-void printDataArr       (List* list);
-void printNextArr       (List* list);
-void printPrevArr       (List* list);
-void printListParameters(List* list);
-void printList          (List* list);
-void printIndexes       (List* list);
+void printDataArr       (List* list, FILE* dumpFile);
+void printNextArr       (List* list, FILE* dumpFile);
+void printPrevArr       (List* list, FILE* dumpFile);
+void printListParameters(List* list, FILE* dumpFile);
+void printList          (List* list, FILE* dumpFile);
+void printIndexes       (List* list, FILE* dumpFile);
 void dumpHtml           (List* list, const char* callReason);
 //----------------------------------------------------------------------------
 int main(){
@@ -70,7 +70,11 @@ int main(){
     //listPop(&list, 1);
 
     //listPush(&list, 25, 2);
-    listDump(&list);
+    FILE* file = fopen("dumpdump.txt", "w");
+    assert(file);
+    listDump(&list, file);
+    fclose(file);
+
     dumpHtml(&list, "PUSH");
     listViz(&list, "dump.txt");
     listDestroy(&list);
@@ -332,74 +336,80 @@ size_t findElemByPosition(List* list, size_t position){
 }
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-void listDump(List* list){
+void listDump(List* list, FILE* dumpFile){
     assert(list);
+    assert(dumpFile);
 
-    printDataArr(list);
-    printNextArr(list);
-    printPrevArr(list);
-    printListParameters(list);
-    printList(list);
-    printIndexes(list);
+    printDataArr(list, dumpFile);
+    printNextArr(list, dumpFile);
+    printPrevArr(list, dumpFile);
+    printListParameters(list, dumpFile);
+    printList(list, dumpFile);
+    printIndexes(list, dumpFile);
 
 }
 //----------------------------------------------------------------------------
-void printDataArr(List* list){
+void printDataArr(List* list, FILE* dumpFile){
     assert(list);
+    assert(dumpFile);
 
-    printf("                            Data arr\n");
-    printf("%2d| ", list->data[0]);
+    fprintf(dumpFile, "                            Data arr\n");
+    fprintf(dumpFile, "%2d| ", list->data[0]);
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
-        printf(SPECIFIER" ", list->data[i]);
+        fprintf(dumpFile, SPECIFIER" ", list->data[i]);
     }
-    printf("\n");
-    printf("----------------------------------------------------------------------------\n");
+    fprintf(dumpFile, "\n");
+    fprintf(dumpFile, "----------------------------------------------------------------------------\n");
 }
 //----------------------------------------------------------------------------
-void printNextArr(List* list){
+void printNextArr(List* list, FILE* dumpFile){
     assert(list);
+    assert(dumpFile);
     
-    printf("                            Next arr\n");
-    printf("%2d| ", list->next[0]);
+    fprintf(dumpFile, "                            Next arr\n");
+    fprintf(dumpFile, "%2d| ", list->next[0]);
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
-        printf("%2d ", list->next[i]);
+        fprintf(dumpFile, "%2d ", list->next[i]);
     }
-    printf("\n");
-    printf("----------------------------------------------------------------------------\n");
+    fprintf(dumpFile, "\n");
+    fprintf(dumpFile, "----------------------------------------------------------------------------\n");
 }
 //----------------------------------------------------------------------------
-void printPrevArr(List* list){
+void printPrevArr(List* list, FILE* dumpFile){
     assert(list);
+    assert(dumpFile);
     
-    printf("                            Prev arr\n");
-    printf("%2d| ", list->prev[0]);
+    fprintf(dumpFile, "                            Prev arr\n");
+    fprintf(dumpFile, "%2d| ", list->prev[0]);
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
-        printf("%2d ", list->prev[i]);
+        fprintf(dumpFile, "%2d ", list->prev[i]);
     }
-    printf("\n");
-    printf("----------------------------------------------------------------------------\n");
+    fprintf(dumpFile, "\n");
+    fprintf(dumpFile, "----------------------------------------------------------------------------\n");
 }
 //----------------------------------------------------------------------------
-void printListParameters(List* list){
+void printListParameters(List* list, FILE* dumpFile){
     assert(list);
-    
-    printf("tail = %lu\n",             (unsigned long) list->tail);
-    printf("head = %lu\n",             (unsigned long) list->head);
-    printf("size = %lu\n",             (unsigned long) list->sizeOfList);
-    printf("full size = %lu\n",        (unsigned long) list->fullSizeOfList);
-    printf("first empty cell = %lu\n", (unsigned long) list->indOfFirstEmptyCell);
-    printf("----------------------------------------------------------------------------\n");
+    assert(dumpFile);
+
+    fprintf(dumpFile, "tail = %lu\n",             (unsigned long) list->tail);
+    fprintf(dumpFile, "head = %lu\n",             (unsigned long) list->head);
+    fprintf(dumpFile, "size = %lu\n",             (unsigned long) list->sizeOfList);
+    fprintf(dumpFile, "full size = %lu\n",        (unsigned long) list->fullSizeOfList);
+    fprintf(dumpFile, "first empty cell = %lu\n", (unsigned long) list->indOfFirstEmptyCell);
+    fprintf(dumpFile, "----------------------------------------------------------------------------\n");
 
 }
 //----------------------------------------------------------------------------
-void printList(List* list){
+void printList(List* list, FILE* dumpFile){
     assert(list);
+    assert(dumpFile);
 
-    printf("                            LIST\n");
+    fprintf(dumpFile, "                            LIST\n");
 
     size_t ind = list->tail;
     for(size_t i = 0; i < list->fullSizeOfList; i++){
-        printf(SPECIFIER" ", list->data[ind]);
+        fprintf(dumpFile, SPECIFIER" ", list->data[ind]);
         if(ind == list->head){
             break;
         }
@@ -407,17 +417,18 @@ void printList(List* list){
             ind = list->next[ind];
         }
     }
-    printf("\n");
+    fprintf(dumpFile, "\n");
 }
 //----------------------------------------------------------------------------
-void printIndexes(List* list){
+void printIndexes(List* list, FILE* dumpFile){
     assert(list);
+    assert(dumpFile);
 
-    printf("                            INDEXES\n");
+    fprintf(dumpFile, "                            INDEXES\n");
 
     size_t ind = list->tail;
     for(size_t i = 0; i < list->fullSizeOfList; i++){
-        printf("%2d ", ind);
+        fprintf(dumpFile, "%2d ", ind);
         if(ind == list->head){
             break;
         }
@@ -425,7 +436,7 @@ void printIndexes(List* list){
             ind = list->next[ind];
         }
     }
-    printf("\n");
+    fprintf(dumpFile, "\n");
 }
 //----------------------------------------------------------------------------
 void listVerify(List* list){// ubrat assery i vyvodit oschibki
@@ -537,14 +548,18 @@ void dumpHtml(List* list, const char* callReason){
     assert(callReason);
 
     FILE* fileptr = fopen("dump.html", "w");
+    assert(fileptr);
+
     fprintf(fileptr, "<pre>\n");
+    
     fprintf(fileptr, "<h3> DUMP <font color=red>BEFORE</font> %s</h3>\n", callReason);
+    listDump(list, fileptr);
     fprintf(fileptr, "Image:\n");
-    fprintf(fileptr, "klkl<img src=dumpBefore.png width=200 height=200>");
+    fprintf(fileptr, "<img src=dumpBefore.png width=200 height=200>\n");
 
     fprintf(fileptr, "<h3> DUMP <font color=red>AFTER</font> %s</h3>\n", callReason);
     fprintf(fileptr, "Image:\n");
-    fprintf(fileptr, "lklk<img src=dumpAfter.png width=200 height=200>");
+    fprintf(fileptr, "<img src=dumpAfter.png width=200 height=200>\n");
 
 
 
