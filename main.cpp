@@ -3,6 +3,7 @@
 #include <assert.h> 
 #include <malloc.h>
 #include <math.h>
+#include <time.h>
 
 //----------------------------------------------------------------------------
 #define POISON 67
@@ -47,6 +48,9 @@ void printList          (List* list, FILE* dumpFile);
 void printIndexes       (List* list, FILE* dumpFile);
 void dumpHtml           (List* list, const char* callReason);
 //----------------------------------------------------------------------------
+char* getStrCurrentTime(char* strTimeBuffer);
+//----------------------------------------------------------------------------
+
 int main(){
 
     List list = {};
@@ -75,7 +79,7 @@ int main(){
     listDump(&list, file);
     fclose(file);
 
-    dumpHtml(&list, "PUSH");
+    dumpHtml(&list, "BEFORE PUSH");
     listViz(&list, "dump.txt");
     listDestroy(&list);
 
@@ -488,7 +492,7 @@ void listViz(List* list, const char* nameTextFile){
         fprintf(fileptr, "  cell%lu[shape = \"Mrecord\", label = \"value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
         fprintf(fileptr, "  next = %d | prev = %d | index = %lu\"", list->next[i], list->prev[i], (unsigned long) i);
         if(i == 0){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"goldenrod1\"];\n");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#f8d969\"];\n");
         }
         else if(i == list->tail){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"#df75a5\"];\n");
@@ -498,17 +502,11 @@ void listViz(List* list, const char* nameTextFile){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"#8796e5\"];\n");
             //fprintf(fileptr, "  head->cell%lu [weight = 0];\n", (unsigned long) i);
         }
-        // else if(i == list->indOfFirstEmptyCell){
-        //     fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightcyan2\"];\n");
-        // }
-        // else if(i == lastEmptyCell){
-        //     fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightyellow\"];\n");
-        // }
         else if(list->data[i] == POISON){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"#b5d5ac\"];\n");
         }
         else{
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"white\"];\n");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#a0e0ee\"];\n");
         }
     }
 
@@ -543,6 +541,9 @@ void listViz(List* list, const char* nameTextFile){
     fprintf(fileptr, "head->cell%lu[color = \"#8796e5\", weight = 1];\n", (unsigned long) list->head);
     fprintf(fileptr, "tail->cell%lu[color = \"#df75a5\"];\n", (unsigned long) list->tail);
 
+    fprintf(fileptr, " elem[shape = Mrecord, style = \"filled\", fillcolor = \"#a0e0ee\"];\n");
+    fprintf(fileptr, " free[shape = Mrecord, style = \"filled\", fillcolor = \"#b5d5ac\"];\n");
+    fprintf(fileptr, "start[shape = Mrecord, style = \"filled\", fillcolor = \"#f8d969\"];\n");
 
     fprintf(fileptr, "}");
     fclose(fileptr);
@@ -552,21 +553,53 @@ void dumpHtml(List* list, const char* callReason){
     assert(list);
     assert(callReason);
 
-    FILE* fileptr = fopen("dump.html", "w");
+    // time_t currentTime = 0;
+    // time(&currentTime);
+    // char strTimeBuffer[50] = "";
+    // char* strTime = ctime(&currentTime);
+    // strcpy(strTimeBuffer, strTime);
+    // strcat(strTime, ".html");
+    // printf("%s\n", strTime);
+
+    char strTimeBuffer[50] = "";
+    getStrCurrentTime(strTimeBuffer);
+    printf("%s\n", strTimeBuffer);
+
+    FILE* fileptr = fopen(strTimeBuffer, "w");
     assert(fileptr);
 
     fprintf(fileptr, "<pre>\n");
     
-    fprintf(fileptr, "<h3> DUMP <font color=red>BEFORE</font> %s</h3>\n", callReason);
+    fprintf(fileptr, "<h3>                           DUMP <font color=red>%s</font></h3>\n", callReason);
     listDump(list, fileptr);
-    fprintf(fileptr, "Image:\n");
-    fprintf(fileptr, "<img src=dumpBefore.png width=200 height=200>\n");
-
-    fprintf(fileptr, "<h3> DUMP <font color=red>AFTER</font> %s</h3>\n", callReason);
-    fprintf(fileptr, "Image:\n");
-    fprintf(fileptr, "<img src=dumpAfter.png width=200 height=200>\n");
-
-
+    fprintf(fileptr, "\n\nImage:\n");
+    fprintf(fileptr, "<img src=dump.png width=1500 height=300>\n");
 
     fclose(fileptr);
+}
+//----------------------------------------------------------------------------------
+char* getStrCurrentTime(char* strTimeBuffer){
+    time_t currentTime = 0;
+    time(&currentTime);
+    char* strTime = ctime(&currentTime);
+    strcpy(strTimeBuffer, strTime);
+    strcat(strTimeBuffer, ".html");
+    
+    size_t i = 0;
+    while(true){
+        if(strTimeBuffer[i] == '\0'){
+            break;
+        }
+
+        if(strTimeBuffer[i] == ' ' || strTimeBuffer[i] == ':'){
+            strTimeBuffer[i] = '_';
+        }
+        else if(strTimeBuffer[i] == '\n'){
+            strTimeBuffer[i] = '0';
+        }
+        i++;
+    }
+
+
+    return strTimeBuffer;
 }
