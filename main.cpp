@@ -474,38 +474,38 @@ void listViz(List* list, const char* nameTextFile){
     size_t lastEmptyCell = findLastEmptyCell(list);
 
     fprintf(fileptr, "digraph{\n");
-    fprintf(fileptr, "graph [splines=ortho];\n");
+    fprintf(fileptr, "graph [splines=spline];\n");
     fprintf(fileptr, "rankdir = LR\n");
     fprintf(fileptr, "size = \"80, 260\"");
     fprintf(fileptr, "  node[color = \"black\", fontsize = 13];\n");
     fprintf(fileptr, "  edge[color = \"black\", fontcolor = \"black\", fontsize = 10];\n");
 
 
-    fprintf(fileptr, "  head[style = \"filled\", fillcolor = \"#6fe8a1\"];\n");
-    fprintf(fileptr, "  tail[style = \"filled\", fillcolor = \"#a21e5a\"];\n");
+    // fprintf(fileptr, "  head[style = \"filled\", fillcolor = \"#6fe8a1\"];\n");
+    // fprintf(fileptr, "  tail[style = \"filled\", fillcolor = \"#a21e5a\"];\n");
 
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
-        fprintf(fileptr, "  cell%lu[shape = \"record\", label = \"value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
+        fprintf(fileptr, "  cell%lu[shape = \"Mrecord\", label = \"value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
         fprintf(fileptr, "  next = %d | prev = %d | index = %lu\"", list->next[i], list->prev[i], (unsigned long) i);
         if(i == 0){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"goldenrod1\"];\n");
         }
         else if(i == list->tail){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#a5436c\"];\n");
-            fprintf(fileptr, "  tail->cell%lu [weight = 0];\n", (unsigned long) i);
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#df75a5\"];\n");
+            //fprintf(fileptr, "  tail->cell%lu [weight = 0];\n", (unsigned long) i);
         }
         else if(i == list->head){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"pink2\"];\n");
-            fprintf(fileptr, "  head->cell%lu [weight = 0];\n", (unsigned long) i);
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#8796e5\"];\n");
+            //fprintf(fileptr, "  head->cell%lu [weight = 0];\n", (unsigned long) i);
         }
-        else if(i == list->indOfFirstEmptyCell){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightcyan2\"];\n");
-        }
-        else if(i == lastEmptyCell){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightyellow\"];\n");
-        }
+        // else if(i == list->indOfFirstEmptyCell){
+        //     fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightcyan2\"];\n");
+        // }
+        // else if(i == lastEmptyCell){
+        //     fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightyellow\"];\n");
+        // }
         else if(list->data[i] == POISON){
-            fprintf(fileptr, ", style = \"filled\", fillcolor = \"grey\"];\n");
+            fprintf(fileptr, ", style = \"filled\", fillcolor = \"#b5d5ac\"];\n");
         }
         else{
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"white\"];\n");
@@ -517,7 +517,7 @@ void listViz(List* list, const char* nameTextFile){
         fprintf(fileptr, "  cell%d->cell%d [style = invis, weight = 100];\n", i, i + 1);
     }
 
-    fprintf(fileptr, "  edge[color = \"blue\", fontcolor = \"black\", fontsize = 10];\n");
+    fprintf(fileptr, "  edge[color = \"#303330\", fontcolor = \"black\", fontsize = 10];\n");
     size_t ind = list->tail;
     printf("tail = %d", ind);
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
@@ -528,7 +528,6 @@ void listViz(List* list, const char* nameTextFile){
         ind = list->next[ind];
     }
 
-    fprintf(fileptr, "  edge[color = \"red\", fontcolor = \"black\", fontsize = 10];\n");
     size_t indOfEmptyCell = list->indOfFirstEmptyCell;
     size_t indOfLastEmptyCell = findLastEmptyCell(list);
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
@@ -538,6 +537,12 @@ void listViz(List* list, const char* nameTextFile){
         }
         indOfEmptyCell = abs(list->next[indOfEmptyCell]);
     }
+
+    fprintf(fileptr, "  head[shape = Mrecord, style = \"filled\", fillcolor = \"#8796e5\"];\n");
+    fprintf(fileptr, "  tail[shape = Mrecord, style = \"filled\", fillcolor = \"#df75a5\"];\n");
+    fprintf(fileptr, "head->cell%lu[color = \"#8796e5\", weight = 1];\n", (unsigned long) list->head);
+    fprintf(fileptr, "tail->cell%lu[color = \"#df75a5\"];\n", (unsigned long) list->tail);
+
 
     fprintf(fileptr, "}");
     fclose(fileptr);
