@@ -20,31 +20,32 @@ struct List{
     size_t indOfFirstEmptyCell;
 };
 //----------------------------------------------------------------------------
-void listInit(List* list);
+void listInit   (List* list);
 void listDestroy(List* list);
 //----------------------------------------------------------------------------
-void listPush(List* list, list_elem_type pushElem, size_t pushPosition);
-void listPushInTail(List* list, list_elem_type pushElem);
-void listPushInHead(List* list, list_elem_type pushElem);
-void listPushInsideList(List* list, list_elem_type pushElem, size_t pushPosition);
+void listPush           (List* list, list_elem_type pushElem, size_t pushPosition);
+void listPushInTail     (List* list, list_elem_type pushElem);
+void listPushInHead     (List* list, list_elem_type pushElem);
+void listPushInsideList (List* list, list_elem_type pushElem, size_t pushPosition);
 //----------------------------------------------------------------------------
-void listPop(List* list, size_t popPosition);
-void listPopTail(List* list);
-void listPopHead(List* list);
+void listPop            (List* list, size_t popPosition);
+void listPopTail        (List* list);
+void listPopHead        (List* list);
 void listPopInternalElem(List* list, size_t popPosition);
 //----------------------------------------------------------------------------
-int findEmptyCell(List* list);
+int findEmptyCell        (List* list);
 size_t findElemByPosition(List* list, size_t position);
-int findLastEmptyCell(List* list);
+int findLastEmptyCell    (List* list);
 //----------------------------------------------------------------------------
-void listDump(List* list);
-void listViz(List* list, const char* nameTextFile);
-void printDataArr(List* list);
-void printNextArr(List* list);
-void printPrevArr(List* list);
+void listDump           (List* list);
+void listViz            (List* list, const char* nameTextFile);
+void printDataArr       (List* list);
+void printNextArr       (List* list);
+void printPrevArr       (List* list);
 void printListParameters(List* list);
-void printList(List* list);
-void printIndexes(List* list);
+void printList          (List* list);
+void printIndexes       (List* list);
+void dumpHtml           (List* list, const char* callReason);
 //----------------------------------------------------------------------------
 int main(){
 
@@ -70,6 +71,7 @@ int main(){
 
     //listPush(&list, 25, 2);
     listDump(&list);
+    dumpHtml(&list, "PUSH");
     listViz(&list, "dump.txt");
     listDestroy(&list);
 
@@ -479,11 +481,11 @@ void listViz(List* list, const char* nameTextFile){
         }
         else if(i == list->tail){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"#a5436c\"];\n");
-            fprintf(fileptr, "  tail->cell%lu [weight = 1];\n", (unsigned long) i);
+            fprintf(fileptr, "  tail->cell%lu [weight = 0];\n", (unsigned long) i);
         }
         else if(i == list->head){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"pink2\"];\n");
-            fprintf(fileptr, "  head->cell%lu [weight = 1];\n", (unsigned long) i);
+            fprintf(fileptr, "  head->cell%lu [weight = 0];\n", (unsigned long) i);
         }
         else if(i == list->indOfFirstEmptyCell){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"lightcyan2\"];\n");
@@ -499,9 +501,9 @@ void listViz(List* list, const char* nameTextFile){
         }
     }
 
-    fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
+    //fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
     for(size_t i = 0; i < list->fullSizeOfList; i++){
-        fprintf(fileptr, "  cell%d->cell%d [weight = 100];\n", i, i + 1);
+        fprintf(fileptr, "  cell%d->cell%d [style = invis, weight = 100];\n", i, i + 1);
     }
 
     fprintf(fileptr, "  edge[color = \"blue\", fontcolor = \"black\", fontsize = 10];\n");
@@ -527,5 +529,24 @@ void listViz(List* list, const char* nameTextFile){
     }
 
     fprintf(fileptr, "}");
+    fclose(fileptr);
+}
+//----------------------------------------------------------------------------------
+void dumpHtml(List* list, const char* callReason){
+    assert(list);
+    assert(callReason);
+
+    FILE* fileptr = fopen("dump.html", "w");
+    fprintf(fileptr, "<pre>\n");
+    fprintf(fileptr, "<h3> DUMP <font color=red>BEFORE</font> %s</h3>\n", callReason);
+    fprintf(fileptr, "Image:\n");
+    fprintf(fileptr, "klkl<img src=dumpBefore.png width=200 height=200>");
+
+    fprintf(fileptr, "<h3> DUMP <font color=red>AFTER</font> %s</h3>\n", callReason);
+    fprintf(fileptr, "Image:\n");
+    fprintf(fileptr, "lklk<img src=dumpAfter.png width=200 height=200>");
+
+
+
     fclose(fileptr);
 }
