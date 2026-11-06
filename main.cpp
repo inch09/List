@@ -29,10 +29,10 @@ void listPushInTail     (List* list, list_elem_type pushElem);
 void listPushInHead     (List* list, list_elem_type pushElem);
 void listPushInsideList (List* list, list_elem_type pushElem, size_t pushPosition);
 //----------------------------------------------------------------------------
-void listPop            (List* list, size_t popPosition);
-void listPopTail        (List* list);
-void listPopHead        (List* list);
-void listPopInternalElem(List* list, size_t popPosition);
+list_elem_type listPop            (List* list, size_t popPosition);
+list_elem_type listPopTail        (List* list);
+list_elem_type listPopHead        (List* list);
+list_elem_type listPopInternalElem(List* list, size_t popPosition);
 //----------------------------------------------------------------------------
 int findEmptyCell        (List* list);
 size_t findElemByPosition(List* list, size_t position);
@@ -216,32 +216,33 @@ void listPushInsideList(List* list, list_elem_type pushElem, size_t pushPosition
     return;
 }
 //----------------------------------------------------------------------------
-void listPop(List* list, size_t popPosition){
+list_elem_type listPop(List* list, size_t popPosition){
     assert(list);
     assert(list->sizeOfList > 0);
     assert((popPosition >= 1) && (popPosition <= list->sizeOfList));
 
     int indOfPopElem = findElemByPosition(list, popPosition);
     printf("ind of pop = %d\n", indOfPopElem);
+    list_elem_type popElem = 0;
 
     if(popPosition == 1){
-        listPopTail(list);
+        popElem = listPopTail(list);
     }
     else if(popPosition == list->sizeOfList){
-        listPopHead(list);
+        popElem = listPopHead(list);
     }
     else{
-        listPopInternalElem(list, popPosition);
+        popElem = listPopInternalElem(list, popPosition);
     }
     
     size_t lastEmptyCell = findLastEmptyCell(list);
     list->next[lastEmptyCell] = -indOfPopElem;
-    return;
+    return popElem;
 }
 //----------------------------------------------------------------------------
-void listPopTail(List* list){
+list_elem_type listPopTail(List* list){
     assert(list);
-    printf("6767676");
+    list_elem_type popElem = list->data[list->tail];
 
     if(list->sizeOfList == 1){
         list->data[list->tail] = POISON;
@@ -260,11 +261,12 @@ void listPopTail(List* list){
     }
     list->sizeOfList--;
 
-    return;
+    return popElem;
 }
 //----------------------------------------------------------------------------
-void listPopHead(List* list){
+list_elem_type listPopHead(List* list){
     assert(list);
+    list_elem_type popElem = list->data[list->head];
 
     list->data[list->head] = POISON;
     list->next[list->prev[list->head]] = 0;
@@ -274,14 +276,15 @@ void listPopHead(List* list){
     list->prev[rememberHeadInd] = -1;
     list->next[rememberHeadInd] = -rememberHeadInd;
     list->sizeOfList--;
-    return;
+    return popElem;
 
 }
 //----------------------------------------------------------------------------
-void listPopInternalElem(List* list, size_t popPosition){
+list_elem_type listPopInternalElem(List* list, size_t popPosition){
     assert(list);
 
     int indOfPopElem = findElemByPosition(list, popPosition);
+    list_elem_type popElem = list->data[indOfPopElem];
 
     list->data[indOfPopElem] = POISON;
     list->next[list->prev[indOfPopElem]] = list->next[indOfPopElem];
@@ -290,7 +293,7 @@ void listPopInternalElem(List* list, size_t popPosition){
     list->next[indOfPopElem] = -indOfPopElem;
     list->sizeOfList--;
 
-    return;
+    return popElem;
 }
 //----------------------------------------------------------------------------
 int findEmptyCell(List* list){ //return index in array next
@@ -484,10 +487,6 @@ void listViz(List* list, const char* nameTextFile){
     fprintf(fileptr, "  node[color = \"black\", fontsize = 13];\n");
     fprintf(fileptr, "  edge[color = \"black\", fontcolor = \"black\", fontsize = 10];\n");
 
-
-    // fprintf(fileptr, "  head[style = \"filled\", fillcolor = \"#6fe8a1\"];\n");
-    // fprintf(fileptr, "  tail[style = \"filled\", fillcolor = \"#a21e5a\"];\n");
-
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
         fprintf(fileptr, "  cell%lu[shape = \"Mrecord\", label = \"value = "SPECIFIER" |", (unsigned long) i, list->data[i]);
         fprintf(fileptr, "  next = %d | prev = %d | index = %lu\"", list->next[i], list->prev[i], (unsigned long) i);
@@ -563,6 +562,7 @@ void dumpHtml(List* list, const char* callReason){
 
     char strTimeBuffer[50] = "";
     getStrCurrentTime(strTimeBuffer);
+    strcat(strTimeBuffer, ".html");
     printf("%s\n", strTimeBuffer);
 
     FILE* fileptr = fopen(strTimeBuffer, "w");
@@ -583,8 +583,7 @@ char* getStrCurrentTime(char* strTimeBuffer){
     time(&currentTime);
     char* strTime = ctime(&currentTime);
     strcpy(strTimeBuffer, strTime);
-    strcat(strTimeBuffer, ".html");
-    
+
     size_t i = 0;
     while(true){
         if(strTimeBuffer[i] == '\0'){
