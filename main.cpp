@@ -8,7 +8,7 @@
 //----------------------------------------------------------------------------
 #define POISON 67
 typedef int list_elem_type;
-#define SPECIFIER "%2d"
+#define SPECIFIER "%3d"
 //----------------------------------------------------------------------------
 struct List{
     size_t fullSizeOfList;
@@ -46,7 +46,7 @@ void printPrevArr       (List* list, FILE* dumpFile);
 void printListParameters(List* list, FILE* dumpFile);
 void printList          (List* list, FILE* dumpFile);
 void printIndexes       (List* list, FILE* dumpFile);
-void dumpHtml           (List* list, const char* callReason);
+void dumpHtml           (List* list, const char* callReason, FILE* fileHtml);
 //----------------------------------------------------------------------------
 char* getStrCurrentTime(char* strTimeBuffer);
 //----------------------------------------------------------------------------
@@ -58,6 +58,14 @@ int main(){
     for(int i = 1; i < 10; i++){
        listPush(&list, i, i);
     }
+
+    char strTimeBuffer[50] = "";
+    getStrCurrentTime(strTimeBuffer);
+    strcat(strTimeBuffer, ".html");
+
+    FILE* fileHtml = fopen(strTimeBuffer, "w");
+    assert(fileHtml);
+
     // listPush(&list, 52, 6);
     //listPush(&list, 23, 1);
     //listPush(&list, 11, 2);
@@ -74,13 +82,11 @@ int main(){
     //listPop(&list, 1);
 
     //listPush(&list, 25, 2);
-    FILE* file = fopen("dumpdump.txt", "w");
-    assert(file);
-    listDump(&list, file);
-    fclose(file);
 
-    dumpHtml(&list, "BEFORE PUSH");
     listViz(&list, "dump.txt");
+    dumpHtml(&list, "BEFORE PUSH", fileHtml);
+    fclose(fileHtml);
+
     listDestroy(&list);
 
     return 0;
@@ -361,7 +367,7 @@ void printDataArr(List* list, FILE* dumpFile){
     assert(dumpFile);
 
     fprintf(dumpFile, "                            Data arr\n");
-    fprintf(dumpFile, "%2d| ", list->data[0]);
+    fprintf(dumpFile, SPECIFIER"| ", list->data[0]);
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
         fprintf(dumpFile, SPECIFIER" ", list->data[i]);
     }
@@ -374,9 +380,9 @@ void printNextArr(List* list, FILE* dumpFile){
     assert(dumpFile);
     
     fprintf(dumpFile, "                            Next arr\n");
-    fprintf(dumpFile, "%2d| ", list->next[0]);
+    fprintf(dumpFile, "%3d| ", list->next[0]);
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
-        fprintf(dumpFile, "%2d ", list->next[i]);
+        fprintf(dumpFile, "%3d ", list->next[i]);
     }
     fprintf(dumpFile, "\n");
     fprintf(dumpFile, "----------------------------------------------------------------------------\n");
@@ -387,9 +393,9 @@ void printPrevArr(List* list, FILE* dumpFile){
     assert(dumpFile);
     
     fprintf(dumpFile, "                            Prev arr\n");
-    fprintf(dumpFile, "%2d| ", list->prev[0]);
+    fprintf(dumpFile, "%3d| ", list->prev[0]);
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
-        fprintf(dumpFile, "%2d ", list->prev[i]);
+        fprintf(dumpFile, "%3d ", list->prev[i]);
     }
     fprintf(dumpFile, "\n");
     fprintf(dumpFile, "----------------------------------------------------------------------------\n");
@@ -435,7 +441,7 @@ void printIndexes(List* list, FILE* dumpFile){
 
     size_t ind = list->tail;
     for(size_t i = 0; i < list->fullSizeOfList; i++){
-        fprintf(dumpFile, "%2d ", ind);
+        fprintf(dumpFile, "%3d ", ind);
         if(ind == list->head){
             break;
         }
@@ -548,34 +554,17 @@ void listViz(List* list, const char* nameTextFile){
     fclose(fileptr);
 }
 //----------------------------------------------------------------------------------
-void dumpHtml(List* list, const char* callReason){
+void dumpHtml(List* list, const char* callReason, FILE* fileHtml){
     assert(list);
     assert(callReason);
+    assert(fileHtml);
 
-    // time_t currentTime = 0;
-    // time(&currentTime);
-    // char strTimeBuffer[50] = "";
-    // char* strTime = ctime(&currentTime);
-    // strcpy(strTimeBuffer, strTime);
-    // strcat(strTime, ".html");
-    // printf("%s\n", strTime);
+    fprintf(fileHtml, "<pre>\n");
+    fprintf(fileHtml, "<h3>                           DUMP <font color=red>%s</font></h3>\n", callReason);
+    listDump(list, fileHtml);
+    fprintf(fileHtml, "\n\nImage:\n");
+    fprintf(fileHtml, "<img src=dump.png width=1500 height=300>\n");
 
-    char strTimeBuffer[50] = "";
-    getStrCurrentTime(strTimeBuffer);
-    strcat(strTimeBuffer, ".html");
-    printf("%s\n", strTimeBuffer);
-
-    FILE* fileptr = fopen(strTimeBuffer, "w");
-    assert(fileptr);
-
-    fprintf(fileptr, "<pre>\n");
-    
-    fprintf(fileptr, "<h3>                           DUMP <font color=red>%s</font></h3>\n", callReason);
-    listDump(list, fileptr);
-    fprintf(fileptr, "\n\nImage:\n");
-    fprintf(fileptr, "<img src=dump.png width=1500 height=300>\n");
-
-    fclose(fileptr);
 }
 //----------------------------------------------------------------------------------
 char* getStrCurrentTime(char* strTimeBuffer){
