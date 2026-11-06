@@ -74,8 +74,8 @@ int main(){
     listPop(&list, 4);
     listPop(&list, 7);
     listPush(&list, 69, 6);
+    list.next[3] = 12;
 
-    list.next[3] = 6;
 
 
     //listPush(&list, 25, 2);
@@ -536,29 +536,15 @@ void listViz(List* list, const char* nameTextFile){
     fprintf(fileptr, "  edge[color = \"#303330\", fontcolor = \"black\", fontsize = 10];\n");
     size_t ind = list->tail;
     printf("tail = %d", ind);
-    for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
-        if((abs(list->prev[abs(list->next[ind])]) != ind || abs(list->next[abs(list->prev[ind])]) != ind) 
-           && (ind != list->tail && ind != list->head))
-        {
-            fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#d6222b\"];\n", ind, list->next[ind]);
+    for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
+        if(abs(list->prev[abs(list->next[i])]) != i &&  
+           (i != list->tail && i != list->head ) &&
+           (i != list->indOfFirstEmptyCell && i != lastEmptyCell)){
+            fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#d6222b\"];\n", i, abs(list->next[i]));
         }
         else{
-            fprintf(fileptr, "  cell%d->cell%d [weight = 1, dir = both];\n", ind, list->next[ind]);
+            fprintf(fileptr, "  cell%d->cell%d [weight = 1, dir = both];\n", i, abs(list->next[i]));
         }
-        if(ind == list->head){
-            break;
-        }
-        ind = list->next[ind];
-    }
-
-    size_t indOfEmptyCell = list->indOfFirstEmptyCell;
-    size_t indOfLastEmptyCell = findLastEmptyCell(list);
-    for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
-        fprintf(fileptr, "  cell%d->cell%d [weight = 1, dir = both];\n", indOfEmptyCell, abs(list->next[indOfEmptyCell]));
-        if(indOfEmptyCell == indOfLastEmptyCell){
-            break;
-        }
-        indOfEmptyCell = abs(list->next[indOfEmptyCell]);
     }
 
     fprintf(fileptr, "  head[shape = Mrecord, style = \"filled\", fillcolor = \"#8796e5\"];\n");
