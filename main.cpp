@@ -67,30 +67,22 @@ int main(){
     getStrCurrentTime(strTimeBuffer);
     strcat(strTimeBuffer, ".html");
 
-    FILE* fileHtml = fopen(strTimeBuffer, "w");
-    assert(fileHtml);
+    //FILE* fileHtml = fopen(strTimeBuffer, "w");
+    //assert(fileHtml);
 
-    // listPush(&list, 52, 6);
-    //listPush(&list, 23, 1);
-    //listPush(&list, 11, 2);
-    // listPush(&list, 24, 3);
-    // listPush(&list, 17, 4);
-    // listPush(&list, 13, 3);
     listPop(&list, 1);
     listPop(&list, 4);
     listPop(&list, 7);
     listPush(&list, 69, 6);
-    //list.next[3] = 12;
-    //listPop(&list, 2);
-    //listPop(&list, 1);
-    //listPop(&list, 1);
-    //listPop(&list, 1);
+
+    list.next[3] = 6;
+
 
     //listPush(&list, 25, 2);
 
     listViz(&list, "dump.txt");
-    dumpHtml(&list, "BEFORE PUSH", fileHtml);
-    fclose(fileHtml);
+    //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+    //fclose(fileHtml);
 
     listDestroy(&list);
 
@@ -182,15 +174,15 @@ void listPushInTail(List* list, list_elem_type pushElem){
     
     if(list->sizeOfList == 0){
         list->data[list->indOfFirstEmptyCell] = pushElem;
-        list->next[list->indOfFirstEmptyCell] = 0;
-        list->prev[list->indOfFirstEmptyCell] = 0;
+        list->next[list->indOfFirstEmptyCell] = list->indOfFirstEmptyCell;
+        list->prev[list->indOfFirstEmptyCell] = list->indOfFirstEmptyCell;
         list->tail = list->indOfFirstEmptyCell;
         list->head = list->indOfFirstEmptyCell;
     }
     else{
         list->data[list->indOfFirstEmptyCell] = pushElem;
         list->next[list->indOfFirstEmptyCell] = list->tail;
-        list->prev[list->indOfFirstEmptyCell] = 0;
+        list->prev[list->indOfFirstEmptyCell] = list->indOfFirstEmptyCell;
         list->prev[list->tail] = list->indOfFirstEmptyCell;
         list->tail = list->indOfFirstEmptyCell;
     }
@@ -207,7 +199,7 @@ void listPushInHead(List* list, list_elem_type pushElem){
     list->data[list->indOfFirstEmptyCell] = pushElem;
     list->next[list->head] = list->indOfFirstEmptyCell;
     list->prev[list->indOfFirstEmptyCell] = list->head;
-    list->next[list->indOfFirstEmptyCell] = 0;
+    list->next[list->indOfFirstEmptyCell] = list->indOfFirstEmptyCell;
     list->head = list->indOfFirstEmptyCell;
     list->sizeOfList++;
 
@@ -275,7 +267,7 @@ list_elem_type listPopTail(List* list){
     }
     else{
         list->data[list->tail] = POISON;
-        list->prev[list->next[list->tail]] = 0;
+        list->prev[list->next[list->tail]] = list->next[list->tail];
         size_t rememberTailInd = list->tail;
         list->tail = list->next[list->tail];
         list->next[rememberTailInd] = -rememberTailInd;
@@ -294,7 +286,7 @@ list_elem_type listPopHead(List* list){
     list_elem_type popElem = list->data[list->head];    
 
     list->data[list->head] = POISON;
-    list->next[list->prev[list->head]] = 0;
+    list->next[list->prev[list->head]] = list->prev[list->head];
 
     size_t rememberHeadInd = list->head;
     list->head = list->prev[list->head];
@@ -545,7 +537,14 @@ void listViz(List* list, const char* nameTextFile){
     size_t ind = list->tail;
     printf("tail = %d", ind);
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
-        fprintf(fileptr, "  cell%d->cell%d [weight = 1];\n", ind, list->next[ind]);
+        if((abs(list->prev[abs(list->next[ind])]) != ind || abs(list->next[abs(list->prev[ind])]) != ind) 
+           && (ind != list->tail && ind != list->head))
+        {
+            fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#d6222b\"];\n", ind, list->next[ind]);
+        }
+        else{
+            fprintf(fileptr, "  cell%d->cell%d [weight = 1];\n", ind, list->next[ind]);
+        }
         if(ind == list->head){
             break;
         }
@@ -564,12 +563,12 @@ void listViz(List* list, const char* nameTextFile){
 
     fprintf(fileptr, "  head[shape = Mrecord, style = \"filled\", fillcolor = \"#8796e5\"];\n");
     fprintf(fileptr, "  tail[shape = Mrecord, style = \"filled\", fillcolor = \"#df75a5\"];\n");
-    fprintf(fileptr, "head->cell%lu[color = \"#8796e5\", weight = 1];\n", (unsigned long) list->head);
-    fprintf(fileptr, "tail->cell%lu[color = \"#df75a5\"];\n", (unsigned long) list->tail);
+    fprintf(fileptr, "  head->cell%lu[color = \"#8796e5\", weight = 1];\n", (unsigned long) list->head);
+    fprintf(fileptr, "  tail->cell%lu[color = \"#df75a5\", weight = 1];\n", (unsigned long) list->tail);
 
-    fprintf(fileptr, " elem[shape = Mrecord, style = \"filled\", fillcolor = \"#a0e0ee\"];\n");
-    fprintf(fileptr, " free[shape = Mrecord, style = \"filled\", fillcolor = \"#b5d5ac\"];\n");
-    fprintf(fileptr, "start[shape = Mrecord, style = \"filled\", fillcolor = \"#f8d969\"];\n");
+    fprintf(fileptr, " elem[ shape = Mrecord, style = \"filled\", fillcolor = \"#a0e0ee\"];\n");
+    fprintf(fileptr, " free[ shape = Mrecord, style = \"filled\", fillcolor = \"#b5d5ac\"];\n");
+    fprintf(fileptr, " start[shape = Mrecord, style = \"filled\", fillcolor = \"#f8d969\"];\n");
 
     fprintf(fileptr, "}");
     fclose(fileptr);
