@@ -54,21 +54,23 @@ void dumpHtml           (List* list, const char* callReason, FILE* fileHtml);
 //----------------------------------------------------------------------------
 char* getStrCurrentTime(char* strTimeBuffer);
 //----------------------------------------------------------------------------
-
+//perem kolvo argum
 int main(){
-
-    List list = {};
-    listInit(&list);
-    for(int i = 1; i < 10; i++){
-       listPush(&list, i, i);
-    }
 
     char strTimeBuffer[50] = "";
     getStrCurrentTime(strTimeBuffer);
     strcat(strTimeBuffer, ".html");
+    FILE* fileHtml = fopen(strTimeBuffer, "a");
+    assert(fileHtml);
 
-    //FILE* fileHtml = fopen(strTimeBuffer, "w");
-    //assert(fileHtml);
+    List list = {};
+    listInit(&list);
+    for(int i = 1; i < 10; i++){
+        listPush(&list, i, i);
+        listViz(&list, "dump.txt");
+        dumpHtml(&list, "BEFORE PUSH", fileHtml);
+    }
+
 
     listPop(&list, 1);
     listPop(&list, 4);
@@ -81,8 +83,8 @@ int main(){
     //listPush(&list, 25, 2);
 
     listViz(&list, "dump.txt");
-    //dumpHtml(&list, "BEFORE PUSH", fileHtml);
-    //fclose(fileHtml);
+    dumpHtml(&list, "BEFORE PUSH", fileHtml);
+    fclose(fileHtml);
 
     listDestroy(&list);
 
@@ -579,6 +581,7 @@ void dumpHtml(List* list, const char* callReason, FILE* fileHtml){
 }
 //----------------------------------------------------------------------------------
 char* getStrCurrentTime(char* strTimeBuffer){
+    assert(strTimeBuffer);
     time_t currentTime = 0;
     time(&currentTime);
     char* strTime = ctime(&currentTime);
