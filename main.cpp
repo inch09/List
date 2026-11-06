@@ -543,7 +543,7 @@ void listViz(List* list, const char* nameTextFile){
             fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#d6222b\"];\n", ind, list->next[ind]);
         }
         else{
-            fprintf(fileptr, "  cell%d->cell%d [weight = 1];\n", ind, list->next[ind]);
+            fprintf(fileptr, "  cell%d->cell%d [weight = 1, dir = both];\n", ind, list->next[ind]);
         }
         if(ind == list->head){
             break;
@@ -554,7 +554,7 @@ void listViz(List* list, const char* nameTextFile){
     size_t indOfEmptyCell = list->indOfFirstEmptyCell;
     size_t indOfLastEmptyCell = findLastEmptyCell(list);
     for(size_t i = 0; i < list->fullSizeOfList + 1; i++){
-        fprintf(fileptr, "  cell%d->cell%d [weight = 1];\n", indOfEmptyCell, abs(list->next[indOfEmptyCell]));
+        fprintf(fileptr, "  cell%d->cell%d [weight = 1, dir = both];\n", indOfEmptyCell, abs(list->next[indOfEmptyCell]));
         if(indOfEmptyCell == indOfLastEmptyCell){
             break;
         }
