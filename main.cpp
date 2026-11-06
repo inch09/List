@@ -6,6 +6,8 @@
 #include <time.h>
 
 //----------------------------------------------------------------------------
+#define LIST_VERIFY(listPtr) listVerify(listPtr);
+//----------------------------------------------------------------------------
 #define POISON 67
 typedef int list_elem_type;
 #define SPECIFIER "%3d"
@@ -23,6 +25,8 @@ struct List{
 //----------------------------------------------------------------------------
 void listInit   (List* list);
 void listDestroy(List* list);
+//----------------------------------------------------------------------------
+void listVerify (List* list);
 //----------------------------------------------------------------------------
 void listPush           (List* list, list_elem_type pushElem, size_t pushPosition);
 void listPushInTail     (List* list, list_elem_type pushElem);
@@ -76,6 +80,7 @@ int main(){
     listPop(&list, 4);
     listPop(&list, 7);
     listPush(&list, 69, 6);
+    //list.next[3] = 12;
     //listPop(&list, 2);
     //listPop(&list, 1);
     //listPop(&list, 1);
@@ -123,7 +128,7 @@ void listInit(List* list){
 
     list->prev[0] = 0;
     for(size_t i = 1; i < list->fullSizeOfList + 1; i++){
-        list->prev[i] = -1;
+        list->prev[i] = -(i - 1);
     }
 
     list->head = 1;
@@ -149,18 +154,11 @@ void listPush(List* list, list_elem_type pushElem, size_t pushPosition){
     assert(list);
     assert((pushPosition >= 1) && (pushPosition <= (list->sizeOfList + 1)));
     assert(list->indOfFirstEmptyCell != 0);
-
+    LIST_VERIFY(list);
 
     size_t nextEmptyCell = abs(list->next[list->indOfFirstEmptyCell]);
+    list->prev[abs(list->next[list->indOfFirstEmptyCell])] = 0;
 
-    
-
-    //int numOfEmptyCell = findEmptyCell(list);
-    //printf("%d", numOfEmptyCell);
-    // if(numOfEmptyCell < 0){
-    //     assert(strcmp("PUSH", "ERROR") == 0);
-    // }
-    // else{
     if(pushPosition == 1){
         listPushInTail(list, pushElem);
     }
@@ -170,13 +168,17 @@ void listPush(List* list, list_elem_type pushElem, size_t pushPosition){
     else{
         listPushInsideList(list, pushElem, pushPosition);
     }
+
     list->indOfFirstEmptyCell = nextEmptyCell;
+
+    LIST_VERIFY(list);
     return;
     // }
 }
 //----------------------------------------------------------------------------
 void listPushInTail(List* list, list_elem_type pushElem){
     assert(list);
+    LIST_VERIFY(list);
     
     if(list->sizeOfList == 0){
         list->data[list->indOfFirstEmptyCell] = pushElem;
@@ -193,11 +195,14 @@ void listPushInTail(List* list, list_elem_type pushElem){
         list->tail = list->indOfFirstEmptyCell;
     }
     list->sizeOfList++;
+
+    LIST_VERIFY(list);
     return;
 }
 //----------------------------------------------------------------------------
 void listPushInHead(List* list, list_elem_type pushElem){
     assert(list);
+    LIST_VERIFY(list);
 
     list->data[list->indOfFirstEmptyCell] = pushElem;
     list->next[list->head] = list->indOfFirstEmptyCell;
@@ -205,11 +210,14 @@ void listPushInHead(List* list, list_elem_type pushElem){
     list->next[list->indOfFirstEmptyCell] = 0;
     list->head = list->indOfFirstEmptyCell;
     list->sizeOfList++;
+
+    LIST_VERIFY(list);
     return;
 }
 //----------------------------------------------------------------------------
 void listPushInsideList(List* list, list_elem_type pushElem, size_t pushPosition){
     assert(list);
+    LIST_VERIFY(list);
     
     int indOfPreviousPos = findElemByPosition(list, pushPosition - 1);
 
@@ -219,6 +227,8 @@ void listPushInsideList(List* list, list_elem_type pushElem, size_t pushPosition
     list->prev[list->next[indOfPreviousPos]] = list->indOfFirstEmptyCell;//
     list->next[indOfPreviousPos] = list->indOfFirstEmptyCell;//
     list->sizeOfList++;
+
+    LIST_VERIFY(list);
     return;
 }
 //----------------------------------------------------------------------------
@@ -226,10 +236,13 @@ list_elem_type listPop(List* list, size_t popPosition){
     assert(list);
     assert(list->sizeOfList > 0);
     assert((popPosition >= 1) && (popPosition <= list->sizeOfList));
+    LIST_VERIFY(list);
+
 
     int indOfPopElem = findElemByPosition(list, popPosition);
-    printf("ind of pop = %d\n", indOfPopElem);
     list_elem_type popElem = 0;
+    size_t lastEmptyCell = findLastEmptyCell(list);
+
 
     if(popPosition == 1){
         popElem = listPopTail(list);
@@ -241,14 +254,17 @@ list_elem_type listPop(List* list, size_t popPosition){
         popElem = listPopInternalElem(list, popPosition);
     }
     
-    size_t lastEmptyCell = findLastEmptyCell(list);
     list->next[lastEmptyCell] = -indOfPopElem;
+    list->prev[indOfPopElem] = -lastEmptyCell;
+
+    LIST_VERIFY(list);
     return popElem;
 }
 //----------------------------------------------------------------------------
 list_elem_type listPopTail(List* list){
     assert(list);
     list_elem_type popElem = list->data[list->tail];
+    LIST_VERIFY(list);
 
     if(list->sizeOfList == 1){
         list->data[list->tail] = POISON;
@@ -267,12 +283,15 @@ list_elem_type listPopTail(List* list){
     }
     list->sizeOfList--;
 
+    LIST_VERIFY(list);
     return popElem;
 }
 //----------------------------------------------------------------------------
 list_elem_type listPopHead(List* list){
     assert(list);
-    list_elem_type popElem = list->data[list->head];
+    LIST_VERIFY(list);
+
+    list_elem_type popElem = list->data[list->head];    
 
     list->data[list->head] = POISON;
     list->next[list->prev[list->head]] = 0;
@@ -282,12 +301,14 @@ list_elem_type listPopHead(List* list){
     list->prev[rememberHeadInd] = -1;
     list->next[rememberHeadInd] = -rememberHeadInd;
     list->sizeOfList--;
-    return popElem;
 
+    LIST_VERIFY(list);
+    return popElem;
 }
 //----------------------------------------------------------------------------
 list_elem_type listPopInternalElem(List* list, size_t popPosition){
     assert(list);
+    LIST_VERIFY(list);
 
     int indOfPopElem = findElemByPosition(list, popPosition);
     list_elem_type popElem = list->data[indOfPopElem];
@@ -299,6 +320,7 @@ list_elem_type listPopInternalElem(List* list, size_t popPosition){
     list->next[indOfPopElem] = -indOfPopElem;
     list->sizeOfList--;
 
+    LIST_VERIFY(list);
     return popElem;
 }
 //----------------------------------------------------------------------------
@@ -352,6 +374,7 @@ size_t findElemByPosition(List* list, size_t position){
 void listDump(List* list, FILE* dumpFile){
     assert(list);
     assert(dumpFile);
+    LIST_VERIFY(list);
 
     printDataArr(list, dumpFile);
     printNextArr(list, dumpFile);
@@ -360,6 +383,7 @@ void listDump(List* list, FILE* dumpFile){
     printList(list, dumpFile);
     printIndexes(list, dumpFile);
 
+    LIST_VERIFY(list);
 }
 //----------------------------------------------------------------------------
 void printDataArr(List* list, FILE* dumpFile){
@@ -455,25 +479,25 @@ void printIndexes(List* list, FILE* dumpFile){
 void listVerify(List* list){// ubrat assery i vyvodit oschibki
     assert(list);
     if(list == NULL){
-        assert(0 && "text" ); // strcmp("LIST NULL", "POINTER") == 0);
+        assert(0 && "NULL LIST POINTER"); // strcmp("LIST NULL", "POINTER") == 0);
     }
     if(list->data == NULL){
-        assert(strcmp("LIST DATA NULL", "POINTER") == 0);
+        assert(0 && "LIST DATA NULL POINTER");
     }
     if(list->next == NULL){
-        assert(strcmp("LIST NEXT NULL", "POINTER") == 0);
+        assert(0 && "LIST NEXT NULL POINTER");
     }
     if(list->prev == NULL){
-        assert(strcmp("LIST PREV NULL", "POINTER") == 0);
+        assert(0 && "LIST PREV NULL POINTER");
     }
     if((list->head <= 0) || (list->head >= list->fullSizeOfList)){
-        assert(strcmp("HEAD IS NOT", "IN THE ARRAY") == 0);
+        assert(0 && "HEAD IS NOT IN THE ARRAY");
     }
     if((list->tail <= 0) || (list->tail >= list->fullSizeOfList)){
-        assert(strcmp("LIST IS NOT", "IN THE ARRAY") == 0);
+        assert(0 && "LIST IS NOT IN THE ARRAY");
     }
     if(list->sizeOfList > list->fullSizeOfList){
-        assert(strcmp("LIST OVER", "FLOW") == 0);
+        assert(0 && "LIST OVER FLOW");
     }
 }
 //----------------------------------------------------------------------------
@@ -501,11 +525,9 @@ void listViz(List* list, const char* nameTextFile){
         }
         else if(i == list->tail){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"#df75a5\"];\n");
-            //fprintf(fileptr, "  tail->cell%lu [weight = 0];\n", (unsigned long) i);
         }
         else if(i == list->head){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"#8796e5\"];\n");
-            //fprintf(fileptr, "  head->cell%lu [weight = 0];\n", (unsigned long) i);
         }
         else if(list->data[i] == POISON){
             fprintf(fileptr, ", style = \"filled\", fillcolor = \"#b5d5ac\"];\n");
@@ -515,7 +537,6 @@ void listViz(List* list, const char* nameTextFile){
         }
     }
 
-    //fprintf(fileptr, "  edge[color = \"white\", fontcolor = \"black\", fontsize = 10];\n");
     for(size_t i = 0; i < list->fullSizeOfList; i++){
         fprintf(fileptr, "  cell%d->cell%d [style = invis, weight = 100];\n", i, i + 1);
     }
