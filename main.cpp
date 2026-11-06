@@ -74,7 +74,7 @@ int main(){
     listPop(&list, 4);
     listPop(&list, 7);
     listPush(&list, 69, 6);
-    list.next[3] = 12;
+    //list.next[3] = 12;
 
 
 
@@ -149,7 +149,7 @@ void listPush(List* list, list_elem_type pushElem, size_t pushPosition){
     LIST_VERIFY(list);
 
     size_t nextEmptyCell = abs(list->next[list->indOfFirstEmptyCell]);
-    list->prev[abs(list->next[list->indOfFirstEmptyCell])] = 0;
+    list->prev[abs(list->next[list->indOfFirstEmptyCell])] = -abs(list->next[list->indOfFirstEmptyCell]);
 
     if(pushPosition == 1){
         listPushInTail(list, pushElem);
@@ -542,10 +542,15 @@ void listViz(List* list, const char* nameTextFile){
            (i != list->indOfFirstEmptyCell && i != lastEmptyCell)){
             fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#d6222b\"];\n", i, abs(list->next[i]));
         }
-        else{
+        else if(i != list->head && i != lastEmptyCell){
             fprintf(fileptr, "  cell%d->cell%d [weight = 1, dir = both];\n", i, abs(list->next[i]));
         }
     }
+    fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#df75a5\"];\n", list->tail, abs(list->prev[list->tail]));
+    fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#8796e5\"];\n", list->head, abs(list->next[list->head]));
+    fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#b5d5ac\"];\n", list->indOfFirstEmptyCell, abs(list->prev[list->indOfFirstEmptyCell]));
+    fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#b5d5ac\"];\n", lastEmptyCell, abs(list->next[lastEmptyCell]));
+
 
     fprintf(fileptr, "  head[shape = Mrecord, style = \"filled\", fillcolor = \"#8796e5\"];\n");
     fprintf(fileptr, "  tail[shape = Mrecord, style = \"filled\", fillcolor = \"#df75a5\"];\n");
