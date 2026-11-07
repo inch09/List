@@ -1,0 +1,981 @@
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe, файл: .\main.cpp, строка: 355, функция: size_t findElemByPosition(List*, size_t),
+
+Сообщение: ВНЕЗАПНО: Логическая ошибка: Неверно, что "(position > 0) && (position <= list->sizeOfList)".
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x1114 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x0041FB46 in C:\Users\Иван\Documents\GitHub\List\main.exe: findElemByPosition() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:355:
+
+    353: size_t findElemByPosition(List* list, size_t position){
+    354:     assert(list);
+=>  355:     assert((position > 0) && (position <= list->sizeOfList));
+    356:     
+    357:     if(position == 1){
+
+# 1 0x0041F23D in C:\Users\Иван\Documents\GitHub\List\main.exe: listPushInsideList() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:222:
+
+    220:     LIST_VERIFY(list);
+    221:     
+=>  222:     int indOfPreviousPos = findElemByPosition(list, pushPosition - 1);
+    223: 
+    224:     list->data[list->indOfFirstEmptyCell] = pushElem;//
+
+# 2 0x0041EF2E in C:\Users\Иван\Documents\GitHub\List\main.exe: listPush() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:171:
+
+    169:     // }
+    170: 
+=>  171:     listPushInsideList(list, pushElem, pushPosition);
+    172:     list->indOfFirstEmptyCell = nextEmptyCell;
+    173: 
+
+# 3 0x0041E8E0 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:70:
+
+     68:     listInit(&list);
+     69:     for(int i = 1; i < 10; i++){
+=>   70:         listPush(&list, i, i);
+     71:         //listViz(&list, "dump.txt");
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 12:46:06, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 12:46:09
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000002 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x5C3C (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00421000 in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:573:
+
+    571: 
+    572:     fprintf(fileptr, "}");
+=>  573:     fclose(fileptr);
+    574: }
+    575: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 12:47:45, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 12:47:47
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000002 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x5C3C (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00421000 in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:573:
+
+    571: 
+    572:     fprintf(fileptr, "}");
+=>  573:     fclose(fileptr);
+    574: }
+    575: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 12:47:45, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 12:47:47
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe, файл: .\main.cpp, строка: 494, функция: void listVerify(List*),
+
+Сообщение: ВНЕЗАПНО: Логическая ошибка: Неверно, что "0 && "HEAD IS NOT IN THE ARRAY"".
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x6480 (Main), GetLastError(): 183 (Невозможно создать файл, так как он уже существует). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00420832 in C:\Users\Иван\Documents\GitHub\List\main.exe: listVerify() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:494:
+
+    492:     }
+    493:     if((list->head <= 0) || (list->head >= list->fullSizeOfList)){
+=>  494:         assert(0 && "HEAD IS NOT IN THE ARRAY");
+    495:     }
+    496:     if((list->tail <= 0) || (list->tail >= list->fullSizeOfList)){
+
+# 1 0x0041F7DF in C:\Users\Иван\Documents\GitHub\List\main.exe: listPopHead() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:305:
+
+    303:     list->sizeOfList--;
+    304: 
+=>  305:     LIST_VERIFY(list);
+    306:     return popElem;
+    307: }
+
+# 2 0x0041F49C in C:\Users\Иван\Documents\GitHub\List\main.exe: listPop() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:251:
+
+    249:     }
+    250:     else if(popPosition == list->sizeOfList){
+=>  251:         popElem = listPopHead(list);
+    252:     }
+    253:     else{
+
+# 3 0x0041E93C in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:78:
+
+     76:     listPop(&list, 1);
+     77:     listPop(&list, 4);
+=>   78:     listPop(&list, 7);
+     79:     listPush(&list, 69, 6);
+     80:     //list.next[4] = 7;
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 12:50:18, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 12:50:20
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000002 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x2CCC (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FEC in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:573:
+
+    571: 
+    572:     fprintf(fileptr, "}");
+=>  573:     fclose(fileptr);
+    574: }
+    575: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 12:50:58, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 12:51:01
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000002 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x2CCC (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FEC in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:573:
+
+    571: 
+    572:     fprintf(fileptr, "}");
+=>  573:     fclose(fileptr);
+    574: }
+    575: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 12:50:58, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 12:51:01
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000001 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x5F64 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FFB in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:578:
+
+    576: 
+    577:     fprintf(fileptr, "}");
+=>  578:     fclose(fileptr);
+    579: }
+    580: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 12:55:11, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 12:55:13
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000001 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x5F64 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FFB in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:578:
+
+    576: 
+    577:     fprintf(fileptr, "}");
+=>  578:     fclose(fileptr);
+    579: }
+    580: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 12:55:11, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 12:55:14
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000001 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x282C (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FFB in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:578:
+
+    576: 
+    577:     fprintf(fileptr, "}");
+=>  578:     fclose(fileptr);
+    579: }
+    580: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:03:05, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:03:07
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000001 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x282C (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FFB in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:578:
+
+    576: 
+    577:     fprintf(fileptr, "}");
+=>  578:     fclose(fileptr);
+    579: }
+    580: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:03:05, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:03:07
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000001 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x1D6C (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FB7 in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:578:
+
+    576: 
+    577:     fprintf(fileptr, "}");
+=>  578:     fclose(fileptr);
+    579: }
+    580: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:06:49, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:06:51
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000001 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x1D6C (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FB7 in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:578:
+
+    576: 
+    577:     fprintf(fileptr, "}");
+=>  578:     fclose(fileptr);
+    579: }
+    580: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:06:49, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:06:51
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000001 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x6A58 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FBF in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:578:
+
+    576: 
+    577:     fprintf(fileptr, "}");
+=>  578:     fclose(fileptr);
+    579: }
+    580: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     //listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:07:16, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:07:18
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x7770E728 в функции RtlReleaseSRWLockShared(). Попытка прочесть данные по адресу 0x00000001 в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txUnhandledExceptionFilter(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x6A58 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x7770E728 in C:\Windows\SYSTEM32\ntdll.dll: RtlReleaseSRWLockShared()
+# 1 0x77753B52 in C:\Windows\SYSTEM32\ntdll.dll: RtlGetSystemTimeAndBias()
+# 2 0x776FD0FA in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 3 0x760C88A9 in C:\Windows\System32\msvcrt.dll: free()
+# 4 0x7610B2A6 in C:\Windows\System32\msvcrt.dll: ungetwc()
+# 5 0x760FBDD9 in C:\Windows\System32\msvcrt.dll: clearerr_s()
+# 6 0x760FBE82 in C:\Windows\System32\msvcrt.dll: fclose()
+
+# 7 0x00420FBF in C:\Users\Иван\Documents\GitHub\List\main.exe: listViz() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:578:
+
+    576: 
+    577:     fprintf(fileptr, "}");
+=>  578:     fclose(fileptr);
+    579: }
+    580: //----------------------------------------------------------------------------------
+
+# 8 0x0041E900 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:74:
+
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+     73:     }
+=>   74:     listViz(&list, "dump.txt");
+     75: 
+     76:     //listPop(&list, 1);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:07:16, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:07:19
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe, файл: .\main.cpp, строка: 499, функция: void listVerify(List*),
+
+Сообщение: ВНЕЗАПНО: Логическая ошибка: Неверно, что "0 && "HEAD IS NOT IN THE ARRAY"".
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x4C44 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x004207EB in C:\Users\Иван\Documents\GitHub\List\main.exe: listVerify() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:499:
+
+    497:     }
+    498:     if((list->head <= 0) || (list->head >= list->fullSizeOfList)){
+=>  499:         assert(0 && "HEAD IS NOT IN THE ARRAY");
+    500:     }
+    501:     if((list->tail <= 0) || (list->tail >= list->fullSizeOfList)){
+
+# 1 0x0041EE64 in C:\Users\Иван\Documents\GitHub\List\main.exe: listPush() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:156:
+
+    154:     assert((pushPosition >= 1) && (pushPosition <= (list->sizeOfList + 1)));
+    155:     assert(list->indOfFirstEmptyCell != 0);
+=>  156:     LIST_VERIFY(list);
+    157: 
+    158:     size_t nextEmptyCell = abs(list->next[list->indOfFirstEmptyCell]);
+
+# 2 0x0041E8E0 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:70:
+
+     68:     listInit(&list);
+     69:     for(int i = 1; i < 10; i++){
+=>   70:         listPush(&list, i, i);
+     71:         //listViz(&list, "dump.txt");
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:23:56, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:23:59
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe, файл: .\main.cpp, строка: 360, функция: size_t findElemByPosition(List*, size_t),
+
+Сообщение: ВНЕЗАПНО: Логическая ошибка: Неверно, что "(position > 0) && (position <= list->sizeOfList)".
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x3D80 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x0041FAFE in C:\Users\Иван\Documents\GitHub\List\main.exe: findElemByPosition() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:360:
+
+    358: size_t findElemByPosition(List* list, size_t position){
+    359:     assert(list);
+=>  360:     assert((position > 0) && (position <= list->sizeOfList));
+    361:     
+    362:     if(position == 1){
+
+# 1 0x0041F206 in C:\Users\Иван\Documents\GitHub\List\main.exe: listPushInsideList() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:224:
+
+    222:     LIST_VERIFY(list);
+    223:     
+=>  224:     int indOfPreviousPos = findElemByPosition(list, pushPosition - 1);
+    225: 
+    226:     list->data[list->indOfFirstEmptyCell] = pushElem;//
+
+# 2 0x0041EED7 in C:\Users\Иван\Documents\GitHub\List\main.exe: listPush() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:171:
+
+    169:     // }
+    170:         
+=>  171:     listPushInsideList(list, pushElem, pushPosition);
+    172:     list->indOfFirstEmptyCell = nextEmptyCell;
+    173:     list->head = list->prev[0];
+
+# 3 0x0041E8E0 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:70:
+
+     68:     listInit(&list);
+     69:     for(int i = 1; i < 10; i++){
+=>   70:         listPush(&list, i, i);
+     71:         //listViz(&list, "dump.txt");
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:24:18, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:24:20
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Иван\Documents\GitHub\List\main.exe, файл: .\main.cpp, строка: 360, функция: size_t findElemByPosition(List*, size_t),
+
+Сообщение: ВНЕЗАПНО: Логическая ошибка: Неверно, что "(position > 0) && (position <= list->sizeOfList)".
+
+#1: TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400], Instance: 0x004FA1DC (32-bit), Flags: Cmdre0, Thread: 0x1120 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x0041FAEF in C:\Users\Иван\Documents\GitHub\List\main.exe: findElemByPosition() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:360:
+
+    358: size_t findElemByPosition(List* list, size_t position){
+    359:     assert(list);
+=>  360:     assert((position > 0) && (position <= list->sizeOfList));
+    361:     
+    362:     if(position == 1){
+
+# 1 0x0041F206 in C:\Users\Иван\Documents\GitHub\List\main.exe: listPushInsideList() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:224:
+
+    222:     LIST_VERIFY(list);
+    223:     
+=>  224:     int indOfPreviousPos = findElemByPosition(list, pushPosition - 1);
+    225: 
+    226:     list->data[list->indOfFirstEmptyCell] = pushElem;//
+
+# 2 0x0041EED7 in C:\Users\Иван\Documents\GitHub\List\main.exe: listPush() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:171:
+
+    169:     // }
+    170:         
+=>  171:     listPushInsideList(list, pushElem, pushPosition);
+    172:     list->indOfFirstEmptyCell = nextEmptyCell;
+    173:     list->head = list->prev[0];
+
+# 3 0x0041E8E0 in C:\Users\Иван\Documents\GitHub\List\main.exe: main() at C:/Users/Иван/Documents/GitHub/List/./main.cpp:70:
+
+     68:     listInit(&list);
+     69:     for(int i = 1; i < 10; i++){
+=>   70:         listPush(&list, i, i);
+     71:         //listViz(&list, "dump.txt");
+     72:         //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 175, Date: 2025-12-31 23:02:50 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	c:\users\иван\downloads\codeblocks\mingw\include\txlib.h
+Compiled:	Nov  7 2026 13:24:41, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, Debug
+Started:	Nov 07 2026 13:24:44
+
+Run file:	C:\Users\Иван\Documents\GitHub\List\main.exe
+Directory:	C:\Users\Иван\Documents\GitHub\List
+
+--------------------------------------------------
