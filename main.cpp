@@ -76,7 +76,7 @@ int main(){
     listPop(&list, 4);
     listPop(&list, 7);
     listPush(&list, 69, 6);
-    //list.next[3] = 12;
+    //list.next[4] = 7;
 
 
 
