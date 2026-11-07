@@ -156,17 +156,16 @@ void listPush(List* list, list_elem_type pushElem, size_t pushPosition){
 
     size_t nextEmptyCell = abs(list->next[list->indOfFirstEmptyCell]);
     list->prev[abs(list->next[list->indOfFirstEmptyCell])] = -abs(list->next[list->indOfFirstEmptyCell]);
-        
     int indOfPreviousPos = findElemByPosition(list, pushPosition - 1);
-    list->data[list->indOfFirstEmptyCell] = pushElem;//
-    list->next[list->indOfFirstEmptyCell] = list->next[indOfPreviousPos];//
-    list->prev[list->indOfFirstEmptyCell] = indOfPreviousPos;//
-    list->prev[list->next[indOfPreviousPos]] = list->indOfFirstEmptyCell;//
-    list->next[indOfPreviousPos] = list->indOfFirstEmptyCell;//
+
+    list->data[list->indOfFirstEmptyCell] = pushElem;
+    list->next[list->indOfFirstEmptyCell] = list->next[indOfPreviousPos];
+    list->prev[list->indOfFirstEmptyCell] = indOfPreviousPos;
+    list->prev[list->next[indOfPreviousPos]] = list->indOfFirstEmptyCell;
+    list->next[indOfPreviousPos] = list->indOfFirstEmptyCell;
 
     list->head = list->prev[0];
     list->tail = list->next[0];
-
     list->indOfFirstEmptyCell = nextEmptyCell;
     list->sizeOfList++;
 
