@@ -57,18 +57,18 @@ char* getStrCurrentTime(char* strTimeBuffer);
 //perem kolvo argum
 int main(){
 
-    char strTimeBuffer[50] = "";
-    getStrCurrentTime(strTimeBuffer);
-    strcat(strTimeBuffer, ".html");
-    FILE* fileHtml = fopen(strTimeBuffer, "a");
-    assert(fileHtml);
+    // char strTimeBuffer[50] = "";
+    // getStrCurrentTime(strTimeBuffer);
+    // strcat(strTimeBuffer, ".html");
+    // FILE* fileHtml = fopen(strTimeBuffer, "a");
+    // assert(fileHtml);
 
     List list = {};
     listInit(&list);
     for(int i = 1; i < 10; i++){
         listPush(&list, i, i);
-        listViz(&list, "dump.txt");
-        dumpHtml(&list, "BEFORE PUSH", fileHtml);
+        //listViz(&list, "dump.txt");
+        //dumpHtml(&list, "BEFORE PUSH", fileHtml);
     }
 
 
@@ -83,8 +83,8 @@ int main(){
     //listPush(&list, 25, 2);
 
     listViz(&list, "dump.txt");
-    dumpHtml(&list, "BEFORE PUSH", fileHtml);
-    fclose(fileHtml);
+    //dumpHtml(&list, "BEFORE PUSH", fileHtml);
+    //fclose(fileHtml);
 
     listDestroy(&list);
 
@@ -542,7 +542,7 @@ void listViz(List* list, const char* nameTextFile){
         if(abs(list->prev[abs(list->next[i])]) != i &&  
            (i != list->tail && i != list->head ) &&
            (i != list->indOfFirstEmptyCell && i != lastEmptyCell)){
-            fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#d6222b\"];\n", i, abs(list->next[i]));
+            fprintf(fileptr, "  cell%d->cell%d [weight = 1, color = \"#d6222b\", fontcolor = \"#d6222b\", fontsize = 20, label = \"connect lost\"];\n", i, abs(list->next[i]));
         }
         else if(i != list->head && i != lastEmptyCell){
             fprintf(fileptr, "  cell%d->cell%d [weight = 1, dir = both];\n", i, abs(list->next[i]));
